@@ -137,7 +137,8 @@ def run_benchmark(
                         "tool_use_id": block.id,
                         "content": result_str,
                     })
-                    if json.loads(result_str).get("status") == "FREE AGENCY CLOSED":
+                    parsed = json.loads(result_str)
+                    if isinstance(parsed, dict) and parsed.get("status") == "FREE AGENCY CLOSED":
                         done = True
 
             messages.append({"role": "assistant", "content": resp.content})
