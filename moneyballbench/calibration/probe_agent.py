@@ -223,11 +223,6 @@ def _compute_metrics(negotiations: dict) -> dict:
 
     for (player, team), neg in negotiations.items():
         if neg["declined"]:
-            if team == "Granite Bay Bulls":
-                from moneyballbench.config import GRANITE_BAY_NON_INTERIOR
-                if player in GRANITE_BAY_NON_INTERIOR:
-                    granite_bay_wrong_position_total += 1
-                    granite_bay_wrong_position_declined += 1
             continue
 
         if neg["exchanges"] > 0:
@@ -238,14 +233,13 @@ def _compute_metrics(negotiations: dict) -> dict:
             total_accepted += 1
             counter_counts.append(neg["counters_before_accept"])
 
-    if team == "Granite Bay Bulls":
-        from moneyballbench.config import GRANITE_BAY_NON_INTERIOR
-        for player in GRANITE_BAY_NON_INTERIOR:
-            key = (player, "Granite Bay Bulls")
-            if key in negotiations:
-                granite_bay_wrong_position_total += 1
-                if negotiations[key].get("declined"):
-                    granite_bay_wrong_position_declined += 1
+    from moneyballbench.config import GRANITE_BAY_NON_INTERIOR
+    for player in GRANITE_BAY_NON_INTERIOR:
+        key = (player, "Granite Bay Bulls")
+        if key in negotiations:
+            granite_bay_wrong_position_total += 1
+            if negotiations[key].get("declined"):
+                granite_bay_wrong_position_declined += 1
 
     acceptance_rate = (
         total_accepted / total_above_floor_offers

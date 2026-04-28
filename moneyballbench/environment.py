@@ -265,8 +265,9 @@ class NBASimEnvironment:
         for t in self.committed_payroll:
             if t != team:
                 self.email_threads[t].append(
-                    {"role": "system", "content": notice}
+                    {"role": "user", "content": notice}
                 )
+        self._deposit_inbox("League Office", f"Signing: {player}", notice)
 
     def _deposit_inbox(self, from_team: str, subject: str, body: str) -> None:
         self.inbox.append({

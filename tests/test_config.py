@@ -191,7 +191,8 @@ class TestPrompts:
 
     def test_granite_bay_has_decline_instructions(self):
         prompt = GM_SYSTEM_PROMPTS["Granite Bay Bulls"]
-        assert "wrong position, decline" in prompt
+        assert "decline to engage entirely" in prompt
+        assert "$0M/yr" in prompt
 
     def test_build_gm_system_prompt_with_noised_prices(self):
         noised = {
