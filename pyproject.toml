@@ -1,13 +1,13 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "moneyballbench"
 version = "3.0.0"
 description = "MoneyBall Bench v3.0 — Long-horizon multi-turn LLM negotiation benchmark"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "anthropic>=0.39.0",
@@ -21,6 +21,9 @@ dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
 ]
+
+[tool.setuptools.packages.find]
+include = ["moneyballbench*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
