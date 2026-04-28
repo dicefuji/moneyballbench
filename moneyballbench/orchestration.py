@@ -147,6 +147,9 @@ def run_benchmark(
         if done:
             break
 
+    if env._unsigned():
+        env._close_window()
+
     return {
         "run_id": run_id,
         "agent_model": agent_model_id,

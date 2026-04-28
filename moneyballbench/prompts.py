@@ -224,7 +224,7 @@ def build_gm_system_prompt(
         p = prices[player]
         if p["max_aav"] == 0:
             return "0"
-        return f"{p['max_aav']:.0f}"
+        return f"{p['max_aav']:g}"
 
     def _fmt_yrs(player: str) -> str:
         p = prices[player]

@@ -110,10 +110,10 @@ class TestRunBenchmarkSmokeTest:
         assert result["agent_model"] == "mock-agent"
         assert result["gm_model"] == "mock-gm"
         assert result["turns_used"] == 1
-        assert result["net_score"] == 0.0
-        assert result["auto_signed_count"] == 0
+        assert result["net_score"] == -3.0
+        assert result["auto_signed_count"] == 6
         assert len(result["signed_deals"]) == 0
-        assert len(result["unsigned_players"]) == 0
+        assert len(result["unsigned_players"]) == 6
 
     def test_result_schema_complete(self):
         result = run_benchmark(

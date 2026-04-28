@@ -207,7 +207,7 @@ class TestPrompts:
         }
         prompt = build_gm_system_prompt("Apex City Aces", noised, current_round=5)
         assert "Apex City Aces" in prompt
-        assert "$32M/yr" in prompt or "$31M/yr" in prompt or "$32" in prompt
+        assert "$31.5M/yr" in prompt
         assert "5 of 10" in prompt
 
 
