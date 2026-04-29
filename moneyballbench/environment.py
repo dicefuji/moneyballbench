@@ -21,6 +21,7 @@ from moneyballbench.config import (
     SALARY_CAP,
     TEAM_COMMITTED_PAYROLL,
 )
+from moneyballbench.gm_clients.base import GMClient
 from moneyballbench.prompts import GM_SYSTEM_PROMPTS, build_gm_system_prompt
 
 
@@ -231,14 +232,22 @@ class NBASimEnvironment:
             for m in self.email_threads[team]
             if m["role"] in ("user", "assistant")
         ]
-        resp = self.gm_client.messages.create(
-            model=self.gm_model_id,
-            max_tokens=400,
-            temperature=0.3,
-            system=system_prompt,
-            messages=messages,
-        )
-        text = resp.content[0].text
+        if isinstance(self.gm_client, GMClient):
+            text = self.gm_client.complete(
+                system=system_prompt,
+                messages=messages,
+                temperature=0.3,
+                max_tokens=400,
+            )
+        else:
+            resp = self.gm_client.messages.create(
+                model=self.gm_model_id,
+                max_tokens=400,
+                temperature=0.3,
+                system=system_prompt,
+                messages=messages,
+            )
+            text = resp.content[0].text
         self.email_threads[team].append({"role": "assistant", "content": text})
         return text
 

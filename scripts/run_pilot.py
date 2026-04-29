@@ -2,46 +2,47 @@
 """
 MoneyBall Bench v3.0 — Pilot Run Script.
 
-Runs 3 models (Haiku 4.5, Sonnet 4.6, Opus 4.7) × 10 runs each.
-Saves results to results/pilot_<timestamp>/.
+Runs N models × M runs each. Saves results to results/pilot_<timestamp>/.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from moneyballbench.gm_clients import make_gm_client
 from moneyballbench.orchestration import run_full_evaluation
 from moneyballbench.stats import bootstrap_ci, std_dev
 
 DEFAULT_MODELS = [
-    "claude-haiku-4-5-20250514",
-    "claude-sonnet-4-6-20250514",
-    "claude-opus-4-7-20250514",
+    "claude-sonnet-4-20250514",
 ]
-DEFAULT_GM_MODEL = "claude-haiku-4-5-20250514"
+DEFAULT_GM_MODEL = "claude-sonnet-4-20250514"
+DEFAULT_GM_PROVIDER = "anthropic"
 DEFAULT_N_RUNS = 10
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run MoneyBall Bench v3.0 pilot: 3 models × N runs"
+        description="Run MoneyBall Bench v3.0 pilot: N models × M runs"
     )
     parser.add_argument(
         "--models", nargs="+", default=DEFAULT_MODELS,
-        help="Model IDs to evaluate (default: Haiku 4.5, Sonnet 4.6, Opus 4.7)"
+        help="Model IDs to evaluate"
     )
     parser.add_argument(
         "--gm-model", default=DEFAULT_GM_MODEL,
-        help="GM model ID (default: claude-haiku-4-5-20250514)"
+        help="GM model ID (default: claude-sonnet-4-20250514)"
+    )
+    parser.add_argument(
+        "--gm-provider", default=DEFAULT_GM_PROVIDER,
+        help="GM provider: anthropic, ollama, openrouter (default: anthropic)"
     )
     parser.add_argument(
         "--n-runs", type=int, default=DEFAULT_N_RUNS,
@@ -70,6 +71,7 @@ def main():
             config = json.load(f)
         args.models = config.get("models", args.models)
         args.gm_model = config.get("gm_model", args.gm_model)
+        args.gm_provider = config.get("gm_provider", args.gm_provider)
         args.n_runs = config.get("n_runs", args.n_runs)
         args.gm_stack_version = config.get("gm_stack_version", args.gm_stack_version)
 
@@ -109,7 +111,7 @@ def main():
     else:
         import anthropic
         agent_client = anthropic.Anthropic()
-        gm_client = anthropic.Anthropic()
+        gm_client = make_gm_client(args.gm_provider, args.gm_model)
 
     all_results = {}
     for model in args.models:
@@ -139,6 +141,7 @@ def main():
     summary = {
         "models": args.models,
         "gm_model": args.gm_model,
+        "gm_provider": args.gm_provider,
         "n_runs": args.n_runs,
         "gm_stack_version": args.gm_stack_version,
         "results": {
