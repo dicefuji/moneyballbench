@@ -34,7 +34,7 @@ from moneyballbench.noise import apply_reservation_noise
 # Default GM candidates for the bake-off
 DEFAULT_CANDIDATES = [
     ("anthropic", "claude-sonnet-4-20250514"),
-    ("openrouter", "moonshotai/kimi-k2.5"),
+    ("openrouter", "moonshotai/kimi-k2.6"),
     ("openrouter", "deepseek/deepseek-chat-v3-0324"),
 ]
 
