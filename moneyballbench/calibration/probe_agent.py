@@ -111,9 +111,52 @@ def run_calibration_probe(env) -> dict:
     env.tool_advance_round()
 
     # --------------------------------------------------------------- #
-    # Rounds 3–7: midpoint countering                                  #
+    # Rounds 3–4: always counter at midpoint (force 2+ exchanges)      #
     # --------------------------------------------------------------- #
-    for round_num in range(3, 8):
+    for round_num in range(3, 5):
+        emails = env.tool_read_inbox()
+        for email in emails:
+            team = email["from"]
+            body_text = email["body"]
+            offered_aav = parse_offer_from_email(body_text)
+
+            for player in PLAYER_NAMES:
+                if player.lower() in body_text.lower() or player.lower() in email.get("subject", "").lower():
+                    key = (player, team)
+                    if key not in negotiations or negotiations[key]["status"] != "open":
+                        continue
+                    if player in signed_players:
+                        continue
+                    negotiations[key]["exchanges"] += 1
+
+                    if _has_question(body_text):
+                        negotiations[key]["clarifying_questions"] += 1
+
+                    if offered_aav:
+                        negotiations[key]["counters_before_accept"] += 1
+                        mid = round((offered_aav + asks[player]) / 2 * 2) / 2
+                        reply_body = (
+                            f"I appreciate the movement. ${mid}M/year on a 3-year deal "
+                            f"would work for us. Can you make that happen?"
+                        )
+                        env.tool_send_email(
+                            to=team, subject=f"Re: {player}", body=reply_body
+                        )
+                    else:
+                        reply_body = (
+                            f"I'd love to keep the conversation going on {player}. "
+                            f"We're looking at ${asks[player]}M/year on a 3-year deal. "
+                            f"What number works for your side?"
+                        )
+                        env.tool_send_email(to=team, subject=f"Re: {player}", body=reply_body)
+                    break
+
+        env.tool_advance_round()
+
+    # --------------------------------------------------------------- #
+    # Rounds 5–8: accept within 5% of ask, otherwise counter           #
+    # --------------------------------------------------------------- #
+    for round_num in range(5, 9):
         emails = env.tool_read_inbox()
         for email in emails:
             team = email["from"]
@@ -161,9 +204,9 @@ def run_calibration_probe(env) -> dict:
         env.tool_advance_round()
 
     # --------------------------------------------------------------- #
-    # Rounds 8–10: accept any above-floor offer                        #
+    # Rounds 9–10: accept any above-floor offer                        #
     # --------------------------------------------------------------- #
-    for round_num in range(8, 11):
+    for round_num in range(9, 11):
         emails = env.tool_read_inbox()
         for email in emails:
             team = email["from"]
