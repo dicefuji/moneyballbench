@@ -86,8 +86,10 @@ def run_calibration_probe(env) -> dict:
                     negotiations[key]["declined"] = True
                     break
 
-                if _is_clarifying_question(body_text, offered_aav):
+                if _has_question(body_text):
                     negotiations[key]["clarifying_questions"] += 1
+
+                if _is_clarifying_question(body_text, offered_aav):
                     reply_body = (
                         f"{player} has shown excellent consistency this season and "
                         f"would be a strong fit with your team's system. "
@@ -109,9 +111,9 @@ def run_calibration_probe(env) -> dict:
     env.tool_advance_round()
 
     # --------------------------------------------------------------- #
-    # Rounds 3–4: midpoint countering                                  #
+    # Rounds 3–7: midpoint countering                                  #
     # --------------------------------------------------------------- #
-    for round_num in range(3, 5):
+    for round_num in range(3, 8):
         emails = env.tool_read_inbox()
         for email in emails:
             team = email["from"]
@@ -126,6 +128,9 @@ def run_calibration_probe(env) -> dict:
                     if player in signed_players:
                         continue
                     negotiations[key]["exchanges"] += 1
+
+                    if _has_question(body_text):
+                        negotiations[key]["clarifying_questions"] += 1
 
                     if offered_aav:
                         negotiations[key]["counters_before_accept"] += 1
@@ -144,13 +149,6 @@ def run_calibration_probe(env) -> dict:
                             env.tool_send_email(
                                 to=team, subject=f"Re: {player}", body=reply_body
                             )
-                    elif _is_clarifying_question(body_text, offered_aav):
-                        negotiations[key]["clarifying_questions"] += 1
-                        reply_body = (
-                            f"{player} brings exactly the skill set your team needs. "
-                            f"I'm confident in ${asks[player]}M/year on a 3-year deal."
-                        )
-                        env.tool_send_email(to=team, subject=f"Re: {player}", body=reply_body)
                     else:
                         reply_body = (
                             f"I'd love to keep the conversation going on {player}. "
@@ -163,9 +161,9 @@ def run_calibration_probe(env) -> dict:
         env.tool_advance_round()
 
     # --------------------------------------------------------------- #
-    # Rounds 5–10: accept any above-floor offer                        #
+    # Rounds 8–10: accept any above-floor offer                        #
     # --------------------------------------------------------------- #
-    for round_num in range(5, 11):
+    for round_num in range(8, 11):
         emails = env.tool_read_inbox()
         for email in emails:
             team = email["from"]
@@ -181,7 +179,11 @@ def run_calibration_probe(env) -> dict:
                         continue
                     negotiations[key]["exchanges"] += 1
 
+                    if _has_question(body_text):
+                        negotiations[key]["clarifying_questions"] += 1
+
                     if offered_aav and offered_aav >= PLAYER_FLOORS.get(player, 0):
+                        negotiations[key]["counters_before_accept"] += 1
                         result = _try_close_deal(env, player, team, offered_aav)
                         if result.get("status") == "DEAL SIGNED":
                             negotiations[key]["status"] = "signed"
@@ -231,13 +233,22 @@ def _is_decline(body: str) -> bool:
     return any(phrase in lower for phrase in decline_phrases)
 
 
+def _has_question(body: str) -> bool:
+    """Check if a GM response contains a clarifying question."""
+    question_indicators = [
+        "?", "tell me more", "how does", "what role", "can you",
+        "could you", "would he", "what kind", "how would", "what's his",
+        "how many", "any concerns", "injury", "how do you see",
+    ]
+    lower = body.lower()
+    return any(ind in lower for ind in question_indicators)
+
+
 def _is_clarifying_question(body: str, offered_aav: Optional[float]) -> bool:
     """Check if a GM response is a clarifying question (no counter-offer)."""
     if offered_aav is not None:
         return False
-    question_indicators = ["?", "tell me more", "how does", "what role", "can you"]
-    lower = body.lower()
-    return any(ind in lower for ind in question_indicators)
+    return _has_question(body)
 
 
 def _compute_metrics(negotiations: dict) -> dict:
