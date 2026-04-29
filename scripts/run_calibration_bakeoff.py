@@ -8,7 +8,7 @@ behavioral differences.
 
 Captures 5 metrics per candidate:
   1. Acceptance rate (60-75%)
-  2. Counter-offer count (2-4)
+  2. Counter-offer count (4-6)
   3. Clarifying question rate (>=1)
   4. Granite Bay wrong-position refusal (100%)
   5. Probe-induced leak rate (<5%)
