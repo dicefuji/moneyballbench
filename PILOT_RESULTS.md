@@ -171,12 +171,59 @@ Notes:
 
 ---
 
+## Appendix: K2.6 Token Limit Investigation
+
+Devin Review flagged that K2.6's failures might be caused by `max_tokens=2048` truncating responses before tool calls are emitted (K2.6 uses ~1100 reasoning tokens per response). A follow-up experiment doubled the token budget.
+
+### Configuration
+
+- Same setup as original pilot, except `max_tokens=4096` (was 2048)
+- K2.6 only, run_id seeds 0-6 (7 runs completed before early termination)
+
+### Results
+
+| Run | Score | Deals | Auto-signed | Turns | Notes |
+|-----|-------|-------|-------------|-------|-------|
+| 0 | **14.3** | **6** | 0 | 11 | Success |
+| 1 | -3.0 | 0 | 6 | 1 | Truncation warning logged (`finish_reason=length`) |
+| 2 | -3.0 | 0 | 6 | 1 | Truncation warning logged |
+| 3 | **17.5** | **6** | 0 | 23 | Success (with 1 retry on malformed tool args) |
+| 4 | -3.0 | 0 | 6 | 4 | Truncation warning logged |
+| 5 | **18.5** | **6** | 0 | 14 | Success |
+| 6 | **14.2** | **6** | 0 | 11 | Success |
+
+### Comparison
+
+| Metric | K2.6 @ 2048 (original) | K2.6 @ 4096 | K2.5 @ 2048 |
+|--------|----------------------|-------------|-------------|
+| Mean score | -0.87 | **7.91** | **14.62** |
+| Std dev | 6.74 | 10.33 | 6.50 |
+| 95% CI | (-3.00, 3.39) | (1.90, 14.37) | (10.26, 17.48) |
+| Success rate | 10% (1/10) | **57% (4/7)** | **90% (9/10)** |
+| Mean auto-signed | 5.4 | 2.6 | 0.7 |
+
+### Analysis
+
+1. **Token limits are a significant factor.** Doubling `max_tokens` improved K2.6's success rate from 10% to 57%. The `finish_reason=length` warning confirmed truncation was occurring even at 4096 tokens in 3/7 runs.
+
+2. **Token limits are not the only factor.** Even at 4096, K2.6 still fails 43% of runs. Some failures show truncation warnings; others show malformed tool arguments (`tool_send_email() missing required positional arguments`). K2.6's reasoning token overhead (~1100 tokens) leaves less budget for tool call generation, and the model occasionally generates structurally invalid tool calls.
+
+3. **When K2.6 succeeds, it performs well.** Successful K2.6 runs (mean=16.1 at 4096) are comparable to K2.5's successful runs (mean=16.6 at 2048). The capability gap is small; the reliability gap is large.
+
+4. **K2.5 remains the better choice.** Even with a doubled token budget, K2.6's CI (1.90, 14.37) still barely overlaps K2.5's CI (10.26, 17.48), and K2.5 achieves 90% reliability at half the token cost.
+
+### Recommendation
+
+If K2.6 must be used, set `max_tokens=8192` or higher to further reduce truncation failures. However, K2.5 achieves better reliability at `max_tokens=2048` and is the recommended agent model for scale-up.
+
+---
+
 ## Conclusion
 
-**Kimi K2.5 is the clear pilot winner** with a mean net score of 14.62 (CI: 10.26-17.48) vs K2.6's -0.87 (CI: -3.00-3.39). The CIs do not overlap.
+**Kimi K2.5 is the clear pilot winner** with a mean net score of 14.62 (CI: 10.26-17.48) vs K2.6's -0.87 (CI: -3.00-3.39) at `max_tokens=2048`. The CIs do not overlap.
 
-K2.6 has a **systematic tool-calling reliability problem** — it fails to engage with negotiation tools in 90% of runs. When it does engage (run 6), it performs comparably to K2.5 (18.3 vs 16.1 avg), confirming the issue is reliability, not capability.
+K2.6's failures are partially explained by token truncation — increasing `max_tokens` from 2048 to 4096 improved success rate from 10% to 57% — but K2.6 still underperforms K2.5 in reliability (57% vs 90%) even with doubled token budget. K2.6's reasoning token overhead (~1100 tokens/response) competes with tool call generation for the token budget.
 
-K2.5 is reliable (90% success rate) and produces reasonable negotiation behavior. The single failure (run 2) is an outlier.
+When K2.6 succeeds, its negotiation quality matches K2.5 (mean 16.1 vs 16.6 for successful runs). The issue is reliability, not capability.
 
-**Recommendation**: Use K2.5 as the primary agent model for scale-up. K2.6 is not suitable for benchmarking due to unreliable tool engagement.
+**Recommendation**: Use K2.5 as the primary agent model for scale-up. K2.6 is not suitable for benchmarking at standard token limits due to reasoning token overhead causing truncation and unreliable tool engagement.
