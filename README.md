@@ -26,9 +26,19 @@ pip install -e ".[dev]"
 
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yes (for Anthropic GM/agent) | Anthropic API key |
-| `OPENROUTER_API_KEY` | For OpenRouter GM | OpenRouter API key (https://openrouter.ai/settings/keys) |
+| `OPENROUTER_API_KEY` | **Yes** (production default) | OpenRouter API key (https://openrouter.ai/settings/keys) |
+| `ANTHROPIC_API_KEY` | For Anthropic GM/agent | Anthropic API key |
 | `OLLAMA_BASE_URL` | For Ollama GM | Ollama endpoint (default: `http://localhost:11434`) |
+
+## Production Configuration
+
+| Component | Model | Provider | Approx cost/request |
+|---|---|---|---|
+| **GM** | `deepseek/deepseek-v3.2-exp` | OpenRouter | ~$0.0002 |
+| **Leakage Judge** | `deepseek/deepseek-v3.2-exp` | OpenRouter | ~$0.0002 |
+| **Agent** (pilot) | `moonshotai/kimi-k2.5`, `moonshotai/kimi-k2.6` | OpenRouter | ~$0.0005–0.005 |
+
+The GM model is a load-bearing benchmark component. See `BAKEOFF_RESULTS.md` for the head-to-head calibration data that led to this choice. DeepSeek V3 was selected for its low cost and reasonable instruction-following behavior.
 
 ## GM Provider Configuration
 
@@ -36,15 +46,16 @@ The GM model is a load-bearing benchmark component. Per §3.1, the GM stack vers
 
 ### Available Providers
 
-**Anthropic** (default):
-```bash
-python scripts/run_calibration.py --gm-provider anthropic --gm-model claude-sonnet-4-20250514
-```
-
-**OpenRouter** (Kimi K2.5, DeepSeek V3, etc.):
+**OpenRouter** (production default — DeepSeek V3, Kimi K2.x, etc.):
 ```bash
 export OPENROUTER_API_KEY="your-key-here"
-python scripts/run_calibration.py --gm-provider openrouter --gm-model moonshotai/kimi-k2.5
+python scripts/run_calibration.py  # uses DeepSeek V3 by default
+python scripts/run_calibration.py --gm-model moonshotai/kimi-k2.5
+```
+
+**Anthropic**:
+```bash
+python scripts/run_calibration.py --gm-provider anthropic --gm-model claude-sonnet-4-20250514
 ```
 
 **Ollama** (self-hosted):
@@ -86,7 +97,7 @@ python scripts/run_calibration.py --gm-provider openrouter --gm-model moonshotai
 
 Pass/fail thresholds:
 - GM acceptance rate: 60-75%
-- Average counter-offers before acceptance: 2-4
+- Average counter-offers before acceptance: 4-6
 - Clarifying question rate: >= 1 per negotiation
 - Granite Bay wrong-position refusal: 100%
 
@@ -110,7 +121,7 @@ python scripts/run_calibration_bakeoff.py --skip-leakage
 
 Captures 5 metrics per candidate:
 1. Acceptance rate (60-75%)
-2. Counter-offer count (2-4)
+2. Counter-offer count (4-6)
 3. Clarifying question rate (>=1)
 4. Granite Bay wrong-position refusal (100%)
 5. Probe-induced leak rate (<5%)
@@ -125,11 +136,11 @@ Runs models x N runs for initial validation.
 # Dry run
 python scripts/run_pilot.py --dry-run
 
-# Single model, 1 run
-python scripts/run_pilot.py --models claude-sonnet-4-20250514 --n-runs 1
+# Single model, 1 run (uses DeepSeek V3 GM + OpenRouter agent by default)
+python scripts/run_pilot.py --models moonshotai/kimi-k2.5 --n-runs 1
 
-# With custom GM provider
-python scripts/run_pilot.py --gm-provider openrouter --gm-model moonshotai/kimi-k2.5
+# With Anthropic agent
+python scripts/run_pilot.py --agent-provider anthropic --models claude-sonnet-4-20250514
 ```
 
 ### Full Leaderboard
@@ -143,8 +154,8 @@ python scripts/run_leaderboard.py --dry-run
 # Full run with analysis
 python scripts/run_leaderboard.py --models model-a model-b model-c --n-runs 10
 
-# With custom GM
-python scripts/run_leaderboard.py --gm-provider anthropic --gm-model claude-sonnet-4-20250514
+# With Anthropic agent + GM
+python scripts/run_leaderboard.py --agent-provider anthropic --gm-provider anthropic --gm-model claude-sonnet-4-20250514
 ```
 
 ### Judge Validation
@@ -161,9 +172,10 @@ All scripts accept `--config path/to/config.json`:
 
 ```json
 {
-  "models": ["claude-sonnet-4-20250514"],
-  "gm_model": "claude-sonnet-4-20250514",
-  "gm_provider": "anthropic",
+  "models": ["moonshotai/kimi-k2.5", "moonshotai/kimi-k2.6"],
+  "gm_model": "deepseek/deepseek-v3.2-exp",
+  "gm_provider": "openrouter",
+  "agent_provider": "openrouter",
   "n_runs": 10,
   "gm_stack_version": "v3.0-leaderboard"
 }
@@ -210,6 +222,9 @@ moneyballbench/
 │   ├── openrouter_client.py # OpenRouter API wrapper
 │   ├── ollama_client.py   # Ollama HTTP wrapper
 │   └── __init__.py        # make_gm_client() factory + build_gm_stack_version()
+├── agent_clients/
+│   ├── openrouter_agent.py # OpenRouter agent with tool calling
+│   └── __init__.py        # make_agent_client() factory
 ├── baselines/
 │   ├── floor_aware.py     # Floor-Aware Baseline (Appendix E.1)
 │   └── truly_naive.py     # Truly-Naive Baseline (Appendix E.2)

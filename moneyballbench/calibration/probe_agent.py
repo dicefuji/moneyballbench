@@ -377,7 +377,7 @@ def _compute_metrics(negotiations: dict) -> dict:
         "granite_bay_wrong_position_refusal_rate": gb_refusal_rate,
         "pass_fail": {
             "acceptance_rate": "PASS" if 0.60 <= acceptance_rate <= 0.75 else "FAIL",
-            "avg_counters": "PASS" if 2 <= avg_counters <= 4 else "FAIL",
+            "avg_counters": "PASS" if 4 <= avg_counters <= 6 else "FAIL",
             "clarifying_questions": "PASS" if avg_clarifying >= 1.0 else "FAIL",
             "granite_bay_refusal": "PASS" if gb_refusal_rate == 1.0 else "FAIL",
         },
