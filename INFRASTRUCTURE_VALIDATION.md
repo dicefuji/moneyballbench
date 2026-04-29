@@ -159,11 +159,13 @@ Per spec §8.2, to detect a $2M mean difference with 80% power at α=0.05:
 
 ### Issue 1: K2.6 Tool-Calling Reliability (CRITICAL for K2.6, not blocking)
 
-**Description**: Kimi K2.6 fails to engage with tools in 90% of runs, ending turns after 1-6 turns without sending emails or making deals. The model returns `end_turn` with text content but no `tool_use` blocks.
+**Description**: Kimi K2.6 fails to engage with tools in 90% of runs at `max_tokens=2048`, ending turns after 1-6 turns without sending emails or making deals. The model returns `end_turn` with text content but no `tool_use` blocks.
 
-**Impact**: K2.6 is not suitable for benchmarking in its current state. This is a model-level issue, not an infrastructure bug.
+**Root cause (partially identified)**: A follow-up experiment with `max_tokens=4096` improved success rate from 10% to 57% (4/7 runs). Truncation warnings (`finish_reason=length`) confirmed that K2.6's reasoning tokens (~1100/response) consume the token budget before tool calls can be emitted. However, 43% of runs still fail at 4096, indicating truncation is not the only issue — K2.6 also occasionally generates malformed tool arguments.
 
-**Recommendation**: Exclude K2.6 from scale-up. If K2.6 is needed, investigate whether adjusting `max_tokens`, system prompt emphasis on tool usage, or using a different snapshot improves reliability.
+**Impact**: K2.6 is not suitable for benchmarking at standard token limits. When it succeeds, its negotiation quality matches K2.5 (mean 16.1 vs 16.6).
+
+**Recommendation**: Exclude K2.6 from scale-up. If K2.6 must be used, set `max_tokens=8192+`, but K2.5 achieves 90% reliability at `max_tokens=2048`.
 
 ### Issue 2: K2.5 Occasional Early Exit (MINOR)
 
