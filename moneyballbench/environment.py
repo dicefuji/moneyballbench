@@ -133,6 +133,9 @@ class NBASimEnvironment:
         if any(d.player == player_name for d in self.signed_deals):
             return {"error": f"{player_name} is already signed."}
 
+        if team_name not in self.committed_payroll:
+            return {"error": f"Unknown team: {team_name}"}
+
         if self.committed_payroll[team_name] + aav > SALARY_CAP:
             return {
                 "error": (
