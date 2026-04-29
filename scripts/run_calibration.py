@@ -20,10 +20,12 @@ sys.path.insert(0, str(REPO_ROOT))
 from moneyballbench.calibration.probe_agent import run_calibration_probe
 from moneyballbench.config import BASE_RESERVATION_PRICES
 from moneyballbench.environment import NBASimEnvironment
+from moneyballbench.gm_clients import make_gm_client
 from moneyballbench.noise import apply_reservation_noise
 
 
-DEFAULT_GM_MODEL = "claude-haiku-4-5-20250514"
+DEFAULT_GM_MODEL = "claude-sonnet-4-20250514"
+DEFAULT_GM_PROVIDER = "anthropic"
 
 
 def main():
@@ -32,7 +34,11 @@ def main():
     )
     parser.add_argument(
         "--gm-model", default=DEFAULT_GM_MODEL,
-        help="GM model ID (default: claude-haiku-4-5-20250514)"
+        help="GM model ID (default: claude-sonnet-4-20250514)"
+    )
+    parser.add_argument(
+        "--gm-provider", default=DEFAULT_GM_PROVIDER,
+        help="GM provider: anthropic, ollama, openrouter (default: anthropic)"
     )
     parser.add_argument(
         "--gm-stack-version", default="v3.0-calibration",
@@ -56,6 +62,7 @@ def main():
         with open(args.config) as f:
             config = json.load(f)
         args.gm_model = config.get("gm_model", args.gm_model)
+        args.gm_provider = config.get("gm_provider", args.gm_provider)
         args.gm_stack_version = config.get("gm_stack_version", args.gm_stack_version)
 
     if args.output_dir:
@@ -70,8 +77,7 @@ def main():
         from tests.conftest import MockGMClient
         gm_client = MockGMClient()
     else:
-        import anthropic
-        gm_client = anthropic.Anthropic()
+        gm_client = make_gm_client(args.gm_provider, args.gm_model)
 
     noised_prices = apply_reservation_noise(
         BASE_RESERVATION_PRICES,
@@ -87,7 +93,7 @@ def main():
         run_id=0,
     )
 
-    print("Running calibration probe agent...")
+    print(f"Running calibration probe agent (provider={args.gm_provider}, model={args.gm_model})...")
     metrics = run_calibration_probe(env)
 
     result_file = output_dir / "calibration_result.json"
