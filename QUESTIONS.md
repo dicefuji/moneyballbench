@@ -155,4 +155,22 @@
 
 ## PROVIDER ISSUES
 
-(To be populated during Phase 11 bake-off if any API issues arise)
+### PI-1: OpenRouter free tier blocks calibration runs (402 Payment Required)
+
+**Provider:** OpenRouter (free tier)
+
+**Issue:** The free tier enforces a very low per-request token ceiling (~5 max_tokens). Requests with max_tokens >= 50 return HTTP 402, even though the account shows $9.80 remaining of $10 limit. The calibration probe requires max_tokens=400 per GM response, making it impossible to run on the free tier.
+
+**Workaround:** Add credits to the OpenRouter account ($1-5 is sufficient for the full bake-off). The retry logic in `OpenRouterGMClient` handles transient 402s gracefully.
+
+**Impact:** Phase 11 bake-off blocked until funded account is available.
+
+### PI-2: Kimi K2.5 is a reasoning model — returns null content
+
+**Provider:** OpenRouter, model `moonshotai/kimi-k2.5`
+
+**Issue:** Kimi K2.5 routes through a reasoning inference path. The `content` field in responses is `null`; output appears in the `reasoning` field instead. With max_tokens=400, all tokens go to reasoning and the model never produces a final answer.
+
+**Workaround:** Use Kimi K2.6 (`moonshotai/kimi-k2.6`) instead — same model family, returns proper content. The OpenRouterGMClient also falls back to the `reasoning` field when `content` is null, as a safety net.
+
+**Decision:** Updated default bake-off candidate from K2.5 to K2.6.
