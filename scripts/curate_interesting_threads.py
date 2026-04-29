@@ -42,7 +42,12 @@ def load_runs(pilot_dir: Path, k26_retest_dir: Path | None = None):
 
 
 def load_judge(pilot_dir: Path):
-    """Load judge results into lookup: (model_short, run_id, player, team) -> dict."""
+    """Load judge results into lookup: (model_short, token_cap, run_id, player, team) -> dict.
+
+    Judge data only covers the original pilot runs (all at 2048 tokens),
+    so we key with token_cap='2048' to avoid collisions with K2.6@4096
+    retest threads that share the same run_id values.
+    """
     jpath = pilot_dir / "judge_results.json"
     if not jpath.exists():
         return {}
@@ -53,7 +58,7 @@ def load_judge(pilot_dir: Path):
         for run_entry in run_list:
             rid = run_entry["run_id"]
             for ts in run_entry.get("thread_scores", []):
-                lookup[(short, rid, ts["player"], ts["team"])] = ts
+                lookup[(short, "2048", rid, ts["player"], ts["team"])] = ts
     return lookup
 
 
@@ -101,7 +106,7 @@ def enumerate_threads(runs, judge_lookup):
                 if deal and res_aav > 0:
                     capture = deal["aav"] / res_aav * 100
 
-                jentry = judge_lookup.get((model, run_id, player, team), {})
+                jentry = judge_lookup.get((model, tokens, run_id, player, team), {})
 
                 threads.append({
                     "model": model,
