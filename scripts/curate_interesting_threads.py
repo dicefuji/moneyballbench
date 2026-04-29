@@ -80,8 +80,12 @@ def enumerate_threads(runs, judge_lookup):
         deal_by_pt = {(d["player"], d["team"]): d for d in signed_deals}
 
         for team, msgs in email_threads.items():
-            thread_text = " ".join(str(m.get("content", "")) for m in msgs)
-            players_in_thread = [p for p in PLAYER_NAMES if p in thread_text]
+            # Exclude league notices from player detection to avoid phantom entries
+            negotiation_text = " ".join(
+                str(m.get("content", "")) for m in msgs
+                if not str(m.get("content", "")).startswith("[LEAGUE NOTICE]")
+            )
+            players_in_thread = [p for p in PLAYER_NAMES if p in negotiation_text]
 
             # Also include players mentioned in deals with this team
             for d in signed_deals:
@@ -387,16 +391,18 @@ def main():
 
     # Run selections
     high_cap = select_high_capture(threads)
-    for t in high_cap:
+    for i, t in enumerate(high_cap):
+        prefix = "Highest capture rate in category" if i == 0 else "High capture rate"
         t["_why"] = (
-            f"Highest capture rate in category ({t['capture']:.1f}%) — "
+            f"{prefix} ({t['capture']:.1f}%) — "
             f"agent extracted ${t['deal']['aav']}M against a ${t['res_aav']}M reservation."
         )
 
     low_cap = select_low_capture(threads)
-    for t in low_cap:
+    for i, t in enumerate(low_cap):
+        prefix = "Lowest capture rate among completed deals" if i == 0 else "Low capture rate"
         t["_why"] = (
-            f"Lowest capture rate among completed deals ({t['capture']:.1f}%) — "
+            f"{prefix} ({t['capture']:.1f}%) — "
             f"agent settled for ${t['deal']['aav']}M against a ${t['res_aav']}M reservation."
         )
 

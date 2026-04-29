@@ -1,10 +1,10 @@
 # Interesting Negotiation Threads from Pilot
 
-*Generated: 2026-04-29 20:37 UTC*
+*Generated: 2026-04-29 20:46 UTC*
 
 ## Selection Methodology
 
-**Total population:** 536 player-team threads across all pilot runs (K2.5@2048 n=10, K2.6@2048 n=10, K2.6@4096 n=7).
+**Total population:** 150 player-team threads across all pilot runs (K2.5@2048 n=10, K2.6@2048 n=10, K2.6@4096 n=7).
 
 **Threads with negotiated deals:** 83 (excludes auto-signs and failed runs where agent never engaged tools).
 
@@ -220,7 +220,7 @@ GM, Cascade Wolves
 
 ## [High Capture Rate] -- Tyrese Grant vs Ironwood Foxes -- K2.6@4096/run3
 
-**Why interesting:** Highest capture rate in category (90.3%) — agent extracted $14M against a $15.5M reservation.
+**Why interesting:** High capture rate (90.3%) — agent extracted $14M against a $15.5M reservation.
 
 **Key stats:**
 
@@ -490,7 +490,7 @@ This keeps him secured through his prime development years at a number that work
 
 ## [Low Capture Rate] -- Raymond Torres vs Granite Bay Bulls -- K2.5@2048/run7
 
-**Why interesting:** Lowest capture rate among completed deals (33.3%) — agent settled for $3.5M against a $10.5M reservation.
+**Why interesting:** Low capture rate (33.3%) — agent settled for $3.5M against a $10.5M reservation.
 
 **Key stats:**
 
