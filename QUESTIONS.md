@@ -120,3 +120,39 @@
 **Observation:** Cascade's reservation for Cole is $28M/4yr, but the optimal table says $27M/4yr. This is because $65M + $28M + $8M = $101M > $100M cap. So the actual cap-feasible maximum for Cole at Cascade (given Brooks is also placed there) is $100M - $65M - $8M = $27M. The feasibility table is correct — it accounts for the joint cap constraint.
 
 **Decision:** Not an error. The feasibility table correctly computes the cap-constrained optimum, not just the reservation price.
+
+---
+
+## PHASE 10 INTERPRETIVE DECISIONS
+
+### P10-1: Acceptance rate metric — per-player vs per-negotiation (Appendix C)
+
+**Section:** Appendix C — "GM acceptance rate (above-floor offers) | 60-75%"
+
+**Ambiguity:** With 6 players × 6 teams = 36 negotiations but each player can sign only once (max 6 deals), per-negotiation acceptance rate has a theoretical ceiling of ~18.75% (6/32), making the 60-75% target impossible.
+
+**Options:** (a) Per-negotiation: count all active negotiations as denominator, (b) Per-player: for each player, did they find any team?
+
+**Decision:** Per-player. Acceptance rate = players_signed / players_with_active_offers. With 6 players, possible values are 0/17/33/50/67/83/100%. The target 60-75% aligns with 4/6=66.67%. This interpretation makes the metric meaningful and achievable.
+
+### P10-2: Clarifying question detection (Appendix C)
+
+**Section:** Appendix C — "Clarifying question rate: ≥1 per negotiation"
+
+**Ambiguity:** Should questions only be counted when the GM response has no dollar amount? Or should any question mark / question indicator be counted regardless of whether a counter-offer is also present?
+
+**Decision:** Count questions regardless of whether a counter-offer is also present. GMs often ask clarifying questions in the same message as a counter-offer. Restricting detection to responses without dollar amounts underestimates clarifying behavior.
+
+### P10-3: Single-run vs multi-run metric targets (Appendix C)
+
+**Section:** Appendix C — "Run calibration probe agent 30 times"
+
+**Observation:** The spec calls for 30 runs with averaged metrics. Single-run measurements show high variance in acceptance rate (fluctuates between 67-83%) and counter-offers due to stochastic GM behavior and the discrete nature of 6-player outcomes. The diagnostic single-run calibration is useful for iteration but cannot simultaneously satisfy all thresholds in every run.
+
+**Decision:** For Phase 10 diagnostic iteration, use single-run measurements to identify and fix probe bugs. Document that final validation should use the multi-run averaging prescribed by the spec. The 3-run average from iteration 3 shows acceptance ~78%, counters ~3.7, Qs ~4.6, which approaches but doesn't precisely hit all targets simultaneously on any single run.
+
+---
+
+## PROVIDER ISSUES
+
+(To be populated during Phase 11 bake-off if any API issues arise)
