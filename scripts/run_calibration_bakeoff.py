@@ -19,7 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -83,6 +83,7 @@ def run_single_candidate(
             metrics["probe_leak_rate"] = None
             metrics["pass_fail"]["probe_leak_rate"] = f"ERROR: {e}"
             metrics["leak_error"] = str(e)
+            metrics["overall_pass"] = False
 
     return {
         "provider": provider,
@@ -97,7 +98,7 @@ def generate_summary_md(results: list[dict], output_dir: Path) -> str:
     lines = [
         "# GM Calibration Bake-Off Results",
         "",
-        f"**Date**: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}",
+        f"**Date**: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
         "",
         "## Comparison Table",
         "",
