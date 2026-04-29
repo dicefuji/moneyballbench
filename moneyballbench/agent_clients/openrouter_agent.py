@@ -221,6 +221,12 @@ class _Messages:
             stop_reason = "tool_use"
         elif finish_reason == "stop":
             stop_reason = "end_turn"
+        elif finish_reason == "length":
+            logger.warning(
+                "OpenRouter response truncated (finish_reason=length). "
+                "Output may be incomplete."
+            )
+            stop_reason = "end_turn"
         else:
             stop_reason = "end_turn"
 
