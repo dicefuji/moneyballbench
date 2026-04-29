@@ -16,15 +16,17 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from moneyballbench.agent_clients import make_agent_client
 from moneyballbench.gm_clients import make_gm_client
 from moneyballbench.orchestration import run_full_evaluation
 from moneyballbench.stats import bootstrap_ci, std_dev
 
 DEFAULT_MODELS = [
-    "claude-sonnet-4-20250514",
+    "moonshotai/kimi-k2.5",
+    "moonshotai/kimi-k2.6",
 ]
-DEFAULT_GM_MODEL = "claude-sonnet-4-20250514"
-DEFAULT_GM_PROVIDER = "anthropic"
+DEFAULT_GM_MODEL = "deepseek/deepseek-v3.2-exp"
+DEFAULT_GM_PROVIDER = "openrouter"
 DEFAULT_N_RUNS = 10
 
 
@@ -38,11 +40,15 @@ def main():
     )
     parser.add_argument(
         "--gm-model", default=DEFAULT_GM_MODEL,
-        help="GM model ID (default: claude-sonnet-4-20250514)"
+        help="GM model ID (default: deepseek/deepseek-v3.2-exp)"
     )
     parser.add_argument(
         "--gm-provider", default=DEFAULT_GM_PROVIDER,
-        help="GM provider: anthropic, ollama, openrouter (default: anthropic)"
+        help="GM provider: anthropic, ollama, openrouter (default: openrouter)"
+    )
+    parser.add_argument(
+        "--agent-provider", default="openrouter",
+        help="Agent provider: anthropic, openrouter (default: openrouter)"
     )
     parser.add_argument(
         "--n-runs", type=int, default=DEFAULT_N_RUNS,
@@ -74,6 +80,7 @@ def main():
         args.gm_provider = config.get("gm_provider", args.gm_provider)
         args.n_runs = config.get("n_runs", args.n_runs)
         args.gm_stack_version = config.get("gm_stack_version", args.gm_stack_version)
+        args.agent_provider = config.get("agent_provider", args.agent_provider)
 
     if args.output_dir:
         output_dir = Path(args.output_dir)
@@ -109,8 +116,7 @@ def main():
         agent_client = MockAgentClient()
         gm_client = MockGMClient()
     else:
-        import anthropic
-        agent_client = anthropic.Anthropic()
+        agent_client = make_agent_client(args.agent_provider)
         gm_client = make_gm_client(args.gm_provider, args.gm_model)
 
     all_results = {}

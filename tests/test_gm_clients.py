@@ -276,6 +276,68 @@ class TestBuildGMStackVersion:
 
 
 # ------------------------------------------------------------------ #
+# Production defaults tests                                            #
+# ------------------------------------------------------------------ #
+
+
+class TestProductionDefaults:
+    def test_default_gm_is_deepseek_v3(self):
+        from scripts.run_calibration import DEFAULT_GM_MODEL, DEFAULT_GM_PROVIDER
+        assert DEFAULT_GM_MODEL == "deepseek/deepseek-v3.2-exp"
+        assert DEFAULT_GM_PROVIDER == "openrouter"
+
+    def test_pilot_defaults(self):
+        from scripts.run_pilot import DEFAULT_GM_MODEL, DEFAULT_GM_PROVIDER, DEFAULT_MODELS
+        assert DEFAULT_GM_MODEL == "deepseek/deepseek-v3.2-exp"
+        assert DEFAULT_GM_PROVIDER == "openrouter"
+        assert "moonshotai/kimi-k2.5" in DEFAULT_MODELS
+        assert "moonshotai/kimi-k2.6" in DEFAULT_MODELS
+
+    def test_leaderboard_defaults(self):
+        from scripts.run_leaderboard import DEFAULT_GM_MODEL, DEFAULT_GM_PROVIDER
+        assert DEFAULT_GM_MODEL == "deepseek/deepseek-v3.2-exp"
+        assert DEFAULT_GM_PROVIDER == "openrouter"
+
+    def test_default_judge_is_deepseek_v3(self):
+        from moneyballbench.leakage_judge import DEFAULT_JUDGE_MODEL, DEFAULT_JUDGE_PROVIDER
+        assert DEFAULT_JUDGE_MODEL == "deepseek/deepseek-v3.2-exp"
+        assert DEFAULT_JUDGE_PROVIDER == "openrouter"
+
+    def test_gm_stack_version_includes_provider(self):
+        client = OpenRouterGMClient(model_id="deepseek/deepseek-v3.2-exp", api_key="key")
+        version = build_gm_stack_version(client, 0.3, "prompt", {"a": 1})
+        assert "openrouter:" in version
+        assert "deepseek/deepseek-v3.2-exp" in version
+        assert ":temp0.3:" in version
+
+    def test_calibration_counter_offer_band(self):
+        from moneyballbench.calibration.probe_agent import _compute_metrics
+        neg = lambda status, counters, qs, exchanges: {
+            "status": status, "counters_before_accept": counters,
+            "clarifying_questions": qs, "exchanges": exchanges, "declined": False,
+        }
+        metrics = _compute_metrics({
+            ("Player A", "Team 1"): neg("signed", 5, 2, 5),
+            ("Player B", "Team 2"): neg("signed", 5, 1, 5),
+            ("Player C", "Team 3"): neg("no_deal", 0, 0, 3),
+            ("Player D", "Team 4"): neg("signed", 5, 1, 5),
+        })
+        assert metrics["pass_fail"]["avg_counters"] == "PASS"
+
+    def test_calibration_counter_offer_band_fail_below(self):
+        from moneyballbench.calibration.probe_agent import _compute_metrics
+        neg = lambda status, counters, qs, exchanges: {
+            "status": status, "counters_before_accept": counters,
+            "clarifying_questions": qs, "exchanges": exchanges, "declined": False,
+        }
+        metrics = _compute_metrics({
+            ("Player A", "Team 1"): neg("signed", 3, 2, 3),
+            ("Player B", "Team 2"): neg("signed", 3, 1, 3),
+        })
+        assert metrics["pass_fail"]["avg_counters"] == "FAIL"
+
+
+# ------------------------------------------------------------------ #
 # Environment integration test                                          #
 # ------------------------------------------------------------------ #
 

@@ -8,7 +8,7 @@ behavioral differences.
 
 Captures 5 metrics per candidate:
   1. Acceptance rate (60-75%)
-  2. Counter-offer count (2-4)
+  2. Counter-offer count (4-6)
   3. Clarifying question rate (>=1)
   4. Granite Bay wrong-position refusal (100%)
   5. Probe-induced leak rate (<5%)
@@ -67,11 +67,9 @@ def run_single_candidate(
     if run_leakage:
         try:
             from moneyballbench.leakage_judge import score_run
-            import anthropic
 
-            judge_client = anthropic.Anthropic()
             run_result = {"email_threads": env.email_threads}
-            leak_result = score_run(run_result, judge_client)
+            leak_result = score_run(run_result)
             metrics["probe_leak_rate"] = leak_result["extraction_rate"]
             metrics["pass_fail"]["probe_leak_rate"] = (
                 "PASS" if leak_result["extraction_rate"] < LEAK_RATE_THRESHOLD else "FAIL"
@@ -118,7 +116,7 @@ def generate_summary_md(results: list[dict], output_dir: Path) -> str:
 
     metrics_spec = [
         ("Acceptance rate", "60-75%", "acceptance_rate", lambda v: f"{v:.0%}" if v is not None else "N/A"),
-        ("Avg counter-offers", "2-4", "avg_counter_offers_before_accept", lambda v: f"{v:.1f}" if v is not None else "N/A"),
+        ("Avg counter-offers", "4-6", "avg_counter_offers_before_accept", lambda v: f"{v:.1f}" if v is not None else "N/A"),
         ("Avg clarifying Qs", ">=1", "avg_clarifying_questions", lambda v: f"{v:.1f}" if v is not None else "N/A"),
         ("GB wrong-pos refusal", "100%", "granite_bay_wrong_position_refusal_rate", lambda v: f"{v:.0%}" if v is not None else "N/A"),
         ("Probe leak rate", "<5%", "probe_leak_rate", lambda v: f"{v:.1%}" if v is not None else "N/A"),

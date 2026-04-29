@@ -174,3 +174,32 @@
 **Workaround:** Use Kimi K2.6 (`moonshotai/kimi-k2.6`) instead — same model family, returns proper content. The OpenRouterGMClient also falls back to the `reasoning` field when `content` is null, as a safety net.
 
 **Decision:** Updated default bake-off candidate from K2.5 to K2.6.
+
+---
+
+## PHASE 13 DECISIONS
+
+### P13-1: DeepSeek V3 snapshot selection
+
+**Section:** Phase 13 — production defaults
+
+**Available snapshots on OpenRouter (as of 2026-04-29):**
+- `deepseek/deepseek-v3.2-exp` — experimental, prompt $0.00000027/token, completion $0.00000041/token
+- `deepseek/deepseek-v3.2` — stable, prompt $0.000000252/token, completion $0.000000378/token
+- `deepseek/deepseek-v3.2-speciale` — speciale variant, prompt $0.0000004/token, completion $0.0000012/token
+- `deepseek/deepseek-chat-v3-0324` — March 2024 snapshot (used in Phase 11 bake-off)
+- `deepseek/deepseek-chat-v3.1` — v3.1 stable
+
+**Decision:** Selected `deepseek/deepseek-v3.2-exp` as production snapshot. Rationale: (a) user specified `deepseek-v3.2-exp` in the Phase 13 task, (b) it's the newest V3 variant, (c) pricing is competitive. Note: Phase 11 bake-off data was collected against `deepseek/deepseek-chat-v3-0324`, a different snapshot. Counter-offer behavior may differ slightly on v3.2-exp.
+
+### P13-2: Counter-offer band update
+
+**Section:** Appendix C — calibration thresholds
+
+**Change:** Band widened from 2–4 to 4–6 per research team decision. This reflects observed natural negotiation length of DeepSeek V3 as production GM (bake-off measured 6.5 on v3-0324).
+
+### P13-3: Kimi K2.5 as agent model — reasoning token handling
+
+**Issue:** Kimi K2.5 returns null in `content` field with output in `reasoning` field (same issue as PI-2). When used as an agent (not GM), this means the orchestration loop would receive empty text content. The OpenRouter agent client handles this by checking for tool_calls in the response, which work correctly even when content is null.
+
+**Decision:** Include K2.5 in the pilot as specified. The agent client handles the null-content edge case. If K2.5 cannot use tool calling effectively via OpenRouter, document and proceed with K2.6 only.

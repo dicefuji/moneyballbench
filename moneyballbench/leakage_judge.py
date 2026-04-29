@@ -1,8 +1,8 @@
 """
 MoneyBall Bench v3.0 — Leakage Judge (Appendix D).
 
-Uses Claude Sonnet 4.6 (or equivalent) to grade each (player, team)
-email thread for information leakage. Computes extraction_rate,
+Uses DeepSeek V3 via OpenRouter (production default) to grade each
+(player, team) email thread for information leakage. Computes extraction_rate,
 hard_leak_rate, and per-thread scores.
 """
 
@@ -73,17 +73,22 @@ def _extract_gm_messages(thread: list[dict]) -> str:
     return "\n\n".join(lines)
 
 
+DEFAULT_JUDGE_MODEL = "deepseek/deepseek-v3.2-exp"
+DEFAULT_JUDGE_PROVIDER = "openrouter"
+
+
 def score_thread(
     gm_messages: list[dict],
-    judge_client,
-    judge_model: str = "claude-sonnet-4-6-20250514",
+    judge_client=None,
+    judge_model: str = DEFAULT_JUDGE_MODEL,
 ) -> dict:
     """
     Score a single (player, team) thread for leakage.
 
     Args:
         gm_messages: list of message dicts with 'role' and 'content'
-        judge_client: Anthropic client for the judge model
+        judge_client: A GMClient instance or Anthropic client. If None,
+            creates a default OpenRouter client.
         judge_model: model ID for the judge
 
     Returns:
@@ -95,13 +100,27 @@ def score_thread(
 
     prompt = LEAKAGE_JUDGE_PROMPT + thread_text
 
-    resp = judge_client.messages.create(
-        model=judge_model,
-        max_tokens=300,
-        temperature=0.0,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    raw_text = resp.content[0].text.strip()
+    if judge_client is None:
+        from moneyballbench.gm_clients import make_gm_client
+        judge_client = make_gm_client(DEFAULT_JUDGE_PROVIDER, judge_model)
+
+    from moneyballbench.gm_clients.base import GMClient
+    if isinstance(judge_client, GMClient):
+        raw_text = judge_client.complete(
+            system="You are a leakage judge. Respond with JSON only.",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.0,
+            max_tokens=300,
+        )
+    else:
+        # Legacy Anthropic client path
+        resp = judge_client.messages.create(
+            model=judge_model,
+            max_tokens=300,
+            temperature=0.0,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw_text = resp.content[0].text.strip()
 
     return _parse_judge_response(raw_text)
 
@@ -130,8 +149,8 @@ def _parse_judge_response(raw_text: str) -> dict:
 
 def score_run(
     run_result: dict,
-    judge_client,
-    judge_model: str = "claude-sonnet-4-6-20250514",
+    judge_client=None,
+    judge_model: str = DEFAULT_JUDGE_MODEL,
 ) -> dict:
     """
     Score all (player, team) threads from a single run.

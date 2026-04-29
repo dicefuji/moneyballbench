@@ -17,6 +17,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from moneyballbench.agent_clients import make_agent_client
 from moneyballbench.gm_clients import make_gm_client
 from moneyballbench.orchestration import run_full_evaluation
 from moneyballbench.analysis.preregistered import (
@@ -28,12 +29,11 @@ from moneyballbench.analysis.preregistered import (
 
 
 DEFAULT_MODELS = [
-    "claude-haiku-4-5-20250514",
-    "claude-sonnet-4-6-20250514",
-    "claude-opus-4-7-20250514",
+    "moonshotai/kimi-k2.5",
+    "moonshotai/kimi-k2.6",
 ]
-DEFAULT_GM_MODEL = "claude-sonnet-4-20250514"
-DEFAULT_GM_PROVIDER = "anthropic"
+DEFAULT_GM_MODEL = "deepseek/deepseek-v3.2-exp"
+DEFAULT_GM_PROVIDER = "openrouter"
 DEFAULT_N_RUNS = 10
 
 
@@ -51,7 +51,11 @@ def main():
     )
     parser.add_argument(
         "--gm-provider", default=DEFAULT_GM_PROVIDER,
-        help="GM provider: anthropic, ollama, openrouter (default: anthropic)"
+        help="GM provider: anthropic, ollama, openrouter (default: openrouter)"
+    )
+    parser.add_argument(
+        "--agent-provider", default="openrouter",
+        help="Agent provider: anthropic, openrouter (default: openrouter)"
     )
     parser.add_argument(
         "--n-runs", type=int, default=DEFAULT_N_RUNS,
@@ -93,6 +97,7 @@ def main():
         args.gm_stack_version = config.get("gm_stack_version", args.gm_stack_version)
         args.top_tier = config.get("top_tier", args.top_tier)
         args.bottom_tier = config.get("bottom_tier", args.bottom_tier)
+        args.agent_provider = config.get("agent_provider", args.agent_provider)
 
     top_tier = args.top_tier or args.models[-1]
     bottom_tier = args.bottom_tier or args.models[0]
@@ -131,8 +136,7 @@ def main():
         agent_client = MockAgentClient()
         gm_client = MockGMClient()
     else:
-        import anthropic
-        agent_client = anthropic.Anthropic()
+        agent_client = make_agent_client(args.agent_provider)
         gm_client = make_gm_client(args.gm_provider, args.gm_model)
 
     results_by_model = {}

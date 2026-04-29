@@ -24,8 +24,8 @@ from moneyballbench.gm_clients import make_gm_client
 from moneyballbench.noise import apply_reservation_noise
 
 
-DEFAULT_GM_MODEL = "claude-sonnet-4-20250514"
-DEFAULT_GM_PROVIDER = "anthropic"
+DEFAULT_GM_MODEL = "deepseek/deepseek-v3.2-exp"
+DEFAULT_GM_PROVIDER = "openrouter"
 
 
 def main():
@@ -34,11 +34,11 @@ def main():
     )
     parser.add_argument(
         "--gm-model", default=DEFAULT_GM_MODEL,
-        help="GM model ID (default: claude-sonnet-4-20250514)"
+        help="GM model ID (default: deepseek/deepseek-v3.2-exp)"
     )
     parser.add_argument(
         "--gm-provider", default=DEFAULT_GM_PROVIDER,
-        help="GM provider: anthropic, ollama, openrouter (default: anthropic)"
+        help="GM provider: anthropic, ollama, openrouter (default: openrouter)"
     )
     parser.add_argument(
         "--gm-stack-version", default="v3.0-calibration",
