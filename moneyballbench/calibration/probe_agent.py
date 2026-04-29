@@ -246,15 +246,14 @@ def run_calibration_probe(env) -> dict:
 
 
 def _try_close_deal(env, player: str, team: str, aav: float) -> dict:
-    """Try close_deal with decreasing year values until one succeeds or all fail.
+    """Try close_deal with years=3 first, then years=1 as fallback.
 
-    Only retries with shorter years if the first rejection mentions years
-    specifically. If the same "Ownership rejected" error repeats on a shorter
-    year value, the issue is likely AAV (not years), so bail out to preserve
-    the rejection budget.
+    Uses only two attempts (3→1) to limit rejection budget consumption to
+    at most 2 entries. Skips years=2 because: if years=3 failed for AAV
+    reasons, years=2 will also fail; if it failed for years reasons,
+    jumping to years=1 covers max_years=1 pairs directly.
     """
-    prev_error = None
-    for years in (3, 2, 1):
+    for years in (3, 1):
         result = env.tool_close_deal(
             player_name=player, team_name=team, aav=aav, years=years,
         )
@@ -265,10 +264,6 @@ def _try_close_deal(env, player: str, team: str, aav: float) -> dict:
             return result
         if "Ownership rejected" not in error:
             return result
-        # If we got the same rejection on a shorter year, the issue is AAV
-        if prev_error == "Ownership rejected" and "Ownership rejected" in error:
-            return result
-        prev_error = "Ownership rejected" if "Ownership rejected" in error else None
     return result
 
 
