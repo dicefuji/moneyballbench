@@ -203,3 +203,45 @@
 **Issue:** Kimi K2.5 returns null in `content` field with output in `reasoning` field (same issue as PI-2). When used as an agent (not GM), this means the orchestration loop would receive empty text content. The OpenRouter agent client handles this by checking for tool_calls in the response, which work correctly even when content is null.
 
 **Decision:** Include K2.5 in the pilot as specified. The agent client handles the null-content edge case. If K2.5 cannot use tool calling effectively via OpenRouter, document and proceed with K2.6 only.
+
+---
+
+## PHASE 16 DECISIONS
+
+### P16-1: Qwen agent model selection
+
+**Section:** Phase 16 — extended pilot
+
+**Available Qwen models on OpenRouter (as of 2026-05-01):**
+- `qwen/qwen3-max` — current-generation Qwen3 Max. Released Sep 23, 2025. 262,144 context, $0.78/M input, $3.90/M output. Optimized for tool calling and RAG. Does NOT include dedicated "thinking" mode. Tool call error rate ~6% per OpenRouter metrics.
+- `qwen/qwen3-235b-a22b` — Qwen3 235B MoE. Larger but less optimized for tool calling.
+- `qwen/qwen-max` — older Qwen Max (pre-Qwen3 series).
+
+**Decision:** Selected `qwen/qwen3-max` as the Qwen agent model. Rationale: (a) it is the most recent current-generation Qwen model, (b) explicitly optimized for tool calling and RAG per OpenRouter description, (c) no "thinking" mode means no reasoning token overhead (unlike K2.6), (d) user specified "qwen/qwen3-max or the closest current-generation Qwen agent-capable model."
+
+### P16-2: DeepSeek V3 self-play documentation
+
+**Section:** Phase 16 — extended pilot
+
+**Self-play configuration:** `deepseek/deepseek-v3.2-exp` serves simultaneously as:
+- GM model (generates negotiation responses)
+- Agent model (generates agent tool calls and strategy)
+- Leakage judge model (evaluates thread leakage)
+
+**Implications:**
+1. The agent and GM share architecture, training data, and behavioral tendencies. The agent may benefit from "knowing" how the GM tends to respond, which could inflate scores.
+2. The judge evaluating its own model's behavior may have blind spots for leakage patterns characteristic of its own generation style.
+3. These overlaps are documented in run metadata and PILOT_RESULTS.md for researcher awareness.
+
+**Decision:** Proceed with self-play as specified. The self-play dynamic is itself a research question worth documenting. Results should be interpreted with awareness of the shared-architecture advantage.
+
+### P16-3: Qwen3 Max performance characteristics
+
+**Observation (post-pilot):** Qwen3 Max demonstrated the most consistent performance of any model tested:
+- 10/10 success rate
+- Lowest standard deviation (1.32) across all 4 models
+- Mean 15.89, CI (15.14, 16.71) — remarkably tight
+- Average 28 turns per run — efficient negotiations
+- Only 1 auto-signed player across all 10 runs
+
+The model's non-reasoning architecture (no dedicated thinking tokens) eliminates the truncation risk that plagued K2.6, while its tool-calling optimization results in reliable engagement.
