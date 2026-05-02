@@ -160,7 +160,7 @@ def _pick_not_selected(ranked, already):
     for t in ranked:
         if _thread_key(t) not in already:
             return t
-    return ranked[0] if ranked else None
+    return None
 
 
 def select_threads_for_model(threads, model_id, is_self_play=False):
