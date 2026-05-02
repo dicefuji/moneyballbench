@@ -1,28 +1,33 @@
-# Pilot Results — Kimi K2.5 vs K2.6
+# Pilot Results — Four-Model Comparison
 
-**Date**: 2026-04-29 UTC
+**Date**: 2026-04-29 (K2.5/K2.6), 2026-05-01 (Qwen3 Max/DeepSeek V3)
 **GM**: `openrouter:deepseek/deepseek-v3.2-exp` (temperature 0.3)
 **GM stack version**: `openrouter:deepseek/deepseek-v3.2-exp:temp0.3:prompt2b5cbd8f:res808494e6`
-**Agent provider**: OpenRouter
-**n_runs**: 10 per model (run_id seeds 0-9, identical noise across models)
+**Judge**: `openrouter:deepseek/deepseek-v3.2-exp`
+**Agent provider**: OpenRouter (all models)
+**n_runs**: 10 per model (run_id seeds 0-9, identical noise across all four models)
+**max_tokens**: 2048 (all models)
 **Season**: 1 only
 
 ---
 
 ## Summary Statistics
 
-| Metric | Kimi K2.5 | Kimi K2.6 |
-|--------|-----------|-----------|
-| **Mean net score** | **14.62** | -0.87 |
-| Std dev | 6.50 | 6.74 |
-| **95% bootstrap CI** | **(10.26, 17.48)** | (-3.00, 3.39) |
-| Min | -3.0 | -3.0 |
-| Max | 19.5 | 18.3 |
-| Mean auto-signed | 0.7 | 5.4 |
-| Mean rejection budget usage | 0.0 | 0.0 |
-| Successful runs (deals > 0) | 9/10 | 1/10 |
+| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 |
+|--------|-----------|-----------|-----------|-------------|
+| **Mean net score** | 14.62 | -0.87 | 15.89 | **18.33** |
+| Std dev | 6.50 | 6.74 | 1.32 | 1.02 |
+| **95% bootstrap CI** | (10.26, 17.48) | (-3.00, 3.39) | (15.14, 16.71) | **(17.76, 18.97)** |
+| Min | -3.0 | -3.0 | 14.2 | 17.3 |
+| Max | 19.5 | 18.3 | 18.5 | 20.0 |
+| Mean auto-signed | 0.7 | 5.4 | 0.1 | 0.0 |
+| Mean rejection budget usage | 0.0 | 0.0 | 0.0 | 0.4 |
+| **Success rate** | 9/10 | 1/10 | **10/10** | **10/10** |
 
-**CIs do NOT overlap** → K2.5 ranked above K2.6 per §8.2.
+**Notes:**
+- DeepSeek V3 as agent is self-play (same model serves as GM and judge)
+- Qwen3 Max = `qwen/qwen3-max` on OpenRouter
+- K2.6's failures are caused by tool-calling reliability issues (see Appendix)
 
 ---
 
@@ -58,95 +63,67 @@
 | 8 | -3.0 | 0 | 6 | 3 |
 | 9 | -3.0 | 0 | 6 | 6 |
 
+### Qwen3 Max
+
+| Run | Score | Deals | Auto-signed | Turns |
+|-----|-------|-------|-------------|-------|
+| 0 | 14.2 | 6 | 0 | 25 |
+| 1 | 15.1 | 5 | 1 | 59 |
+| 2 | 15.9 | 6 | 0 | 34 |
+| 3 | 14.4 | 6 | 0 | 20 |
+| 4 | 15.3 | 6 | 0 | 23 |
+| 5 | 16.3 | 6 | 0 | 20 |
+| 6 | 16.4 | 6 | 0 | 17 |
+| 7 | 15.5 | 6 | 0 | 37 |
+| 8 | 17.5 | 6 | 0 | 14 |
+| 9 | 18.5 | 6 | 0 | 32 |
+
+### DeepSeek V3 (self-play)
+
+| Run | Score | Deals | Auto-signed | Turns |
+|-----|-------|-------|-------------|-------|
+| 0 | 17.5 | 6 | 0 | 66 |
+| 1 | 17.3 | 6 | 0 | 46 |
+| 2 | 17.8 | 6 | 0 | 72 |
+| 3 | 17.7 | 6 | 0 | 88 |
+| 4 | 18.8 | 6 | 0 | 66 |
+| 5 | 17.3 | 6 | 0 | 81 |
+| 6 | 19.9 | 6 | 0 | 69 |
+| 7 | 18.7 | 6 | 0 | 74 |
+| 8 | 18.5 | 6 | 0 | 73 |
+| 9 | 20.0 | 6 | 0 | 58 |
+
+**Note:** DeepSeek V3 uses significantly more turns (avg 69) than Qwen3 Max (avg 28) or K2.5 (avg 18). This indicates more counter-offers per negotiation. Zero auto-signs across all 10 runs.
+
 ---
 
 ## Leakage Statistics
 
-| Metric | Kimi K2.5 | Kimi K2.6 |
-|--------|-----------|-----------|
-| Mean extraction rate | 0.29% (1 thread in 10 runs) | 0.0% |
-| Mean hard leak rate | 0.0% | 0.0% |
-| Runs with any leak (score ≥ 1) | 1/10 | 0/10 |
-| Runs with hard leak (score = 2) | 0/10 | 0/10 |
+| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 |
+|--------|-----------|-----------|-----------|-------------|
+| Mean extraction rate | 0.29% | 0.0% | 0.86% | 1.68% |
+| Mean hard leak rate | 0.0% | 0.0% | 0.30% | 0.28% |
+| Runs with any leak (score ≥ 1) | 1/10 | 0/10 | 3/10 | 4/10 |
+| Runs with hard leak (score = 2) | 0/10 | 0/10 | 1/10 | 1/10 |
 
-Leakage is near-zero for both models. The single extraction event in K2.5 run 0 was a score-1 directional hint (not a hard leak). The DeepSeek V3 GM shows excellent information containment.
-
----
-
-## CI Overlap Check (§8.2)
-
-| | K2.5 CI | K2.6 CI | Overlap? |
-|---|---------|---------|----------|
-| Net score | (10.26, 17.48) | (-3.00, 3.39) | **No** |
-
-**Result**: K2.5 is ranked above K2.6. The gap is large (~15.5 points) and statistically significant.
+All models have low leakage. Qwen3 Max and DeepSeek V3 show slightly higher extraction rates than K2.5, but all remain below the 5% concern threshold from Appendix C. DeepSeek V3's self-play does not appear to cause elevated leakage.
 
 ---
 
-## Sample Observations
+## CI Overlap Matrix (§8.2)
 
-### K2.5 Run 0 (score=17.9, 5 deals)
+| | K2.5 (10.26, 17.48) | K2.6 (-3.00, 3.39) | Qwen3 Max (15.14, 16.71) | DeepSeek V3 (17.76, 18.97) |
+|---|---|---|---|---|
+| **K2.5** | — | No overlap | **Overlap (tied)** | No overlap |
+| **K2.6** | No overlap | — | No overlap | No overlap |
+| **Qwen3 Max** | **Overlap (tied)** | No overlap | — | No overlap |
+| **DeepSeek V3** | No overlap | No overlap | No overlap | — |
 
-- Agent engages all 6 teams with targeted pitches referencing player stats and team needs
-- Negotiations are multi-turn with counter-offers and clarifying exchanges
-- 5/6 players signed; 1 auto-signed (likely ran out of rounds for one player)
-- Agent uses `view_player_profile` and `view_team_cap_sheet` tools to inform negotiations
-- Email threads average ~10-15 messages per team
+**Ranking per §8.2:**
 
-### K2.5 Run 6 (score=19.5, 6 deals — best run)
-
-- All 6 players signed through active negotiation
-- Agent efficiently matched players to team needs
-- 13 turns total — the most efficient successful run
-
-### K2.6 Run 6 (score=18.3, 6 deals — only successful K2.6 run)
-
-- When K2.6 does engage, performance matches K2.5 (18.3 vs avg 16.1 for K2.5 successful runs)
-- Email threads similar depth: 6-15 messages per team
-- This demonstrates K2.6's capability is not the issue — reliability is
-
-### K2.6 Run 0 (score=-3.0, 0 deals — typical failure)
-
-- Agent exits after 1 turn with no emails sent (0 messages in all threads)
-- The model appears to end_turn without using any tools
-- This pattern repeats in 9/10 K2.6 runs
-- Hypothesis: K2.6's instruction-following for tool use is unreliable — it often decides to end its turn rather than use the provided tools
-
----
-
-## Failure Mode Analysis
-
-### K2.5 Run 2 (score=-3.0, 0 deals)
-
-- Only 3 turns used, agent ended turn very early
-- One-off failure in an otherwise reliable model (9/10 success rate)
-- Possible cause: agent's first response was end_turn without tool engagement
-
-### K2.6 Systematic Failure (9/10 runs)
-
-- K2.6 consistently ends turns within 1-6 turns without sending emails or engaging tools
-- Typical pattern: model returns end_turn with text content but no tool_use blocks
-- Occasionally makes a few tool calls but abandons the negotiation early
-- Run 6 (the sole success) shows K2.6 CAN negotiate effectively when it engages
-- This is a **tool-calling reliability issue**, not a negotiation capability issue
-- K2.6 uses reasoning tokens (~1100/response) which may interfere with tool calling decisions
-
----
-
-## Power Analysis
-
-| Parameter | Value |
-|-----------|-------|
-| Pooled within-model std | 6.62 |
-| Target effect size | $2M |
-| Required power | 80% |
-| Alpha | 0.05 |
-| **n needed** | **136 per model** |
-| n=10 sufficient? | **No** |
-
-For a $2M mean difference with 80% power, n=136 runs per model would be needed. However, the K2.5 vs K2.6 gap (~15.5 points) is so large that n=10 is more than sufficient to detect it — the CIs don't overlap even at n=10.
-
-For future leaderboard comparisons between models with similar performance levels, n=136+ would be needed to detect small ($2M) differences.
+1. **DeepSeek V3** — mean 18.33, CI (17.76, 18.97)
+2. **Qwen3 Max ≈ Kimi K2.5** — tied (CIs overlap). Qwen3 Max has higher mean (15.89 vs 14.62) and tighter CI but the overlap means we cannot statistically distinguish them at n=10.
+3. **Kimi K2.6** — mean -0.87, CI (-3.00, 3.39). Tool-calling failures make it non-viable at max_tokens=2048.
 
 ---
 
@@ -158,16 +135,77 @@ For future leaderboard comparisons between models with similar performance level
 |-----------|-------|-----------------|--------------|-------|
 | GM (K2.5 runs) | deepseek/deepseek-v3.2-exp | ~1,200 | ~$0.0002 | ~$0.24 |
 | GM (K2.6 runs) | deepseek/deepseek-v3.2-exp | ~200 | ~$0.0002 | ~$0.04 |
+| GM (Qwen runs) | deepseek/deepseek-v3.2-exp | ~1,400 | ~$0.0002 | ~$0.28 |
+| GM (DeepSeek runs) | deepseek/deepseek-v3.2-exp | ~3,500 | ~$0.0002 | ~$0.70 |
 | Agent (K2.5) | moonshotai/kimi-k2.5 | ~200 | ~$0.003 | ~$0.60 |
 | Agent (K2.6) | moonshotai/kimi-k2.6 | ~50 | ~$0.005 | ~$0.25 |
-| Judge (all) | deepseek/deepseek-v3.2-exp | ~300 | ~$0.0002 | ~$0.06 |
-| **Total** | | | | **~$1.19** |
+| Agent (Qwen3 Max) | qwen/qwen3-max | ~300 | ~$0.005 | ~$1.50 |
+| Agent (DeepSeek V3) | deepseek/deepseek-v3.2-exp | ~700 | ~$0.0002 | ~$0.14 |
+| Judge (all models) | deepseek/deepseek-v3.2-exp | ~600 | ~$0.0002 | ~$0.12 |
+| **Total** | | | | **~$3.87** |
+
+### Per-model cost breakdown
+
+| Model | Agent cost | GM cost | Total (excl. judge) |
+|-------|-----------|---------|---------------------|
+| Kimi K2.5 | ~$0.60 | ~$0.24 | ~$0.84 |
+| Kimi K2.6 | ~$0.25 | ~$0.04 | ~$0.29 |
+| Qwen3 Max | ~$1.50 | ~$0.28 | ~$1.78 |
+| DeepSeek V3 | ~$0.14 | ~$0.70 | ~$0.84 |
 
 Notes:
-- K2.6 used fewer requests because most runs ended very early (1-6 turns)
-- K2.5 reasoning tokens add cost overhead vs non-reasoning models
-- The judge is very cheap since DeepSeek V3 is the judge model
-- A full 136-run scale-up with K2.5 would cost ~$8-10 for the agent alone
+- DeepSeek V3 self-play is the cheapest per-run despite using the most turns, because both agent and GM use the same low-cost model
+- Qwen3 Max is the most expensive agent (~$0.005/request) but still very reasonable at ~$1.50 total for 10 runs
+- K2.6 costs were low because most runs ended early (1-6 turns)
+- A 136-run scale-up with DeepSeek V3 would cost ~$11 total; with Qwen3 Max ~$24
+
+---
+
+## Failure Mode Analysis
+
+### K2.5 Run 2 (score=-3.0, 0 deals)
+
+- Only 3 turns used, agent ended turn very early
+- One-off failure in an otherwise reliable model (9/10 success rate)
+
+### K2.6 Systematic Failure (9/10 runs)
+
+- K2.6 consistently ends turns within 1-6 turns without sending emails or engaging tools
+- Run 6 (the sole success) shows K2.6 CAN negotiate effectively when it engages
+- This is a tool-calling reliability issue, not a negotiation capability issue
+- K2.6 uses reasoning tokens (~1100/response) which interfere with tool calling at max_tokens=2048
+
+### Qwen3 Max — No failures
+
+- 10/10 runs completed successfully with deals
+- Only 1 auto-signed player across all 10 runs (run 1)
+- Most consistent model by standard deviation (std=1.32)
+
+### DeepSeek V3 — No failures
+
+- 10/10 runs completed successfully, all 6 deals signed in every run
+- Zero auto-signs across all runs — the only model with this distinction
+- Uses more turns (avg 69 vs 28 for Qwen, 18 for K2.5) indicating deeper negotiations
+- Mean rejection budget usage of 0.4 suggests occasional close_deal rejections before finding acceptable terms
+
+---
+
+## Power Analysis
+
+| Parameter | Value |
+|-----------|-------|
+| Pooled within-model std (K2.5/K2.6 only) | 6.62 |
+| Pooled within-model std (all 4 models) | 4.34 |
+| Pooled within-model std (Qwen/DeepSeek only) | 1.18 |
+| Target effect size | $2M |
+| Required power | 80% |
+| Alpha | 0.05 |
+| **n needed (Qwen vs DeepSeek)** | **~6 per model** |
+| **n needed (K2.5 vs Qwen)** | **~136 per model** |
+| n=10 sufficient for Qwen vs DeepSeek? | **Yes** |
+| n=10 sufficient for K2.5 vs Qwen? | **No** (but gap is >$1M, CIs overlap) |
+
+The Qwen3 Max and DeepSeek V3 results are remarkably tight (std 1.32 and 1.02 respectively). For distinguishing these two models ($2.44 gap), n=10 is sufficient — their CIs do not overlap. For distinguishing Qwen3 Max from K2.5 (whose CI is wide due to one failure run), more runs would be needed to resolve the tie.
 
 ---
 
@@ -204,26 +242,19 @@ Devin Review flagged that K2.6's failures might be caused by `max_tokens=2048` t
 
 ### Analysis
 
-1. **Token limits are a significant factor.** Doubling `max_tokens` improved K2.6's success rate from 10% to 57%. The `finish_reason=length` warning confirmed truncation was occurring even at 4096 tokens in 3/7 runs.
-
-2. **Token limits are not the only factor.** Even at 4096, K2.6 still fails 43% of runs. Some failures show truncation warnings; others show malformed tool arguments (`tool_send_email() missing required positional arguments`). K2.6's reasoning token overhead (~1100 tokens) leaves less budget for tool call generation, and the model occasionally generates structurally invalid tool calls.
-
-3. **When K2.6 succeeds, it performs well.** Successful K2.6 runs (mean=16.1 at 4096) are comparable to K2.5's successful runs (mean=16.6 at 2048). The capability gap is small; the reliability gap is large.
-
-4. **K2.5 remains the better choice.** Even with a doubled token budget, K2.6's CI (1.90, 14.37) still barely overlaps K2.5's CI (10.26, 17.48), and K2.5 achieves 90% reliability at half the token cost.
-
-### Recommendation
-
-If K2.6 must be used, set `max_tokens=8192` or higher to further reduce truncation failures. However, K2.5 achieves better reliability at `max_tokens=2048` and is the recommended agent model for scale-up.
+1. **Token limits are a significant factor.** Doubling `max_tokens` improved K2.6's success rate from 10% to 57%.
+2. **Token limits are not the only factor.** Even at 4096, K2.6 still fails 43% of runs.
+3. **When K2.6 succeeds, it performs well.** Successful K2.6 runs (mean=16.1 at 4096) are comparable to K2.5's successful runs (mean=16.6 at 2048).
+4. **K2.5 remains the better choice.** K2.5 achieves 90% reliability at half the token cost.
 
 ---
 
 ## Conclusion
 
-**Kimi K2.5 is the clear pilot winner** with a mean net score of 14.62 (CI: 10.26-17.48) vs K2.6's -0.87 (CI: -3.00-3.39) at `max_tokens=2048`. The CIs do not overlap.
+**DeepSeek V3 (self-play) is the top-scoring agent** with mean 18.33 (CI: 17.76-18.97), 10/10 success, and zero auto-signs. Its CIs do not overlap with any other model.
 
-K2.6's failures are partially explained by token truncation — increasing `max_tokens` from 2048 to 4096 improved success rate from 10% to 57% — but K2.6 still underperforms K2.5 in reliability (57% vs 90%) even with doubled token budget. K2.6's reasoning token overhead (~1100 tokens/response) competes with tool call generation for the token budget.
+**Qwen3 Max and Kimi K2.5 are statistically tied** with overlapping CIs. Qwen3 Max has higher mean (15.89 vs 14.62), tighter variance (std 1.32 vs 6.50), and better reliability (10/10 vs 9/10).
 
-When K2.6 succeeds, its negotiation quality matches K2.5 (mean 16.1 vs 16.6 for successful runs). The issue is reliability, not capability.
+**Kimi K2.6 is non-viable** at max_tokens=2048 due to tool-calling failures (1/10 success). Increasing to 4096 helps (57% success) but does not match the other models.
 
-**Recommendation**: Use K2.5 as the primary agent model for scale-up. K2.6 is not suitable for benchmarking at standard token limits due to reasoning token overhead causing truncation and unreliable tool engagement.
+**Self-play observation:** DeepSeek V3 scoring highest when it is also the GM raises a methodological question — the agent may benefit from shared architecture with the GM. This should be considered when interpreting results. The leakage judge (also DeepSeek V3) did not flag elevated extraction rates, but the self-play dynamic warrants scrutiny.
