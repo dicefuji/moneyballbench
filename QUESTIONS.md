@@ -245,3 +245,42 @@
 - Only 1 auto-signed player across all 10 runs
 
 The model's non-reasoning architecture (no dedicated thinking tokens) eliminates the truncation risk that plagued K2.6, while its tool-calling optimization results in reliable engagement.
+
+---
+
+## PHASE 17 DECISIONS
+
+### P17-1: DeepSeek V4 Flash agent model selection
+
+**Section:** Phase 17 — extended pilot
+
+**Model ID on OpenRouter:** `deepseek/deepseek-v4-flash`
+**Snapshot resolved by OpenRouter:** `deepseek/deepseek-v4-flash-20260423` (released Apr 24, 2026)
+
+**Model characteristics:**
+- 284B total parameters, 13B activated (Mixture-of-Experts)
+- 1,048,576 token context window
+- $0.14/M input tokens, $0.28/M output tokens
+- Supports `high` and `xhigh` reasoning efforts; `xhigh` maps to max reasoning
+- Hybrid attention for efficient long-context processing
+
+**Decision:** Used default reasoning mode (no explicit `high` or `xhigh` reasoning effort parameter set). Per instructions: "use the default — do not enable explicit reasoning modes unless the run consistently fails without them." All 10 runs succeeded at default, so no reasoning mode override was needed.
+
+### P17-2: DeepSeek V4 Flash performance characteristics
+
+**Observation (post-pilot):** DeepSeek V4 Flash demonstrated strong, consistent performance:
+- 10/10 success rate
+- Mean 16.69, CI (15.83, 17.60)
+- Standard deviation 1.55 — tight, though slightly wider than Qwen3 Max (1.32) and DeepSeek V3 (1.02)
+- Average 21 turns per run — efficient negotiations comparable to K2.5 (18) and Qwen3 Max (28)
+- Zero auto-signed players across all 10 runs
+- Zero rejection budget usage — never triggered above-reservation close_deal attempts
+- Lowest cost of any model tested ($0.24 for 10 runs)
+
+The model includes reasoning tokens in its output (visible as `reasoning` field in OpenRouter responses), but these fit comfortably within the 2048 max_tokens budget — no truncation issues observed.
+
+### P17-3: Transient API errors with V4 Flash
+
+**Issue:** During the pilot run, V4 Flash occasionally returned HTTP 400 (Bad Request) and 429 (rate limit) errors from OpenRouter. These were transient and resolved by retry logic.
+
+**Decision:** Added HTTP 400 to the list of retryable error codes in both agent and GM OpenRouter clients. The 400 errors appear to be provider-side routing issues (different providers handle the model: AtlasCloud, SiliconFlow) rather than malformed requests, since the same request succeeds on retry.
