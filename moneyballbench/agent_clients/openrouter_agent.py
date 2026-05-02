@@ -168,7 +168,7 @@ class _Messages:
                 return self._parse_response(data)
             except urllib.error.HTTPError as e:
                 last_error = e
-                if e.code in (429, 402, 502, 503):
+                if e.code in (400, 429, 402, 502, 503):
                     backoff = INITIAL_BACKOFF * (2 ** attempt)
                     logger.warning(
                         "OpenRouter agent %d (attempt %d/%d), retrying in %.1fs",
