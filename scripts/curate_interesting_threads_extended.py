@@ -150,81 +150,100 @@ def enumerate_threads(runs, judge_lookup):
 # Category selection (per model)
 # ---------------------------------------------------------------------------
 
+def _thread_key(t):
+    """Unique key for a thread to track already-selected entries."""
+    return (t["run_id"], t["player"], t["team"])
+
+
+def _pick_not_selected(ranked, already):
+    """Pick the first thread from ranked list not already selected."""
+    for t in ranked:
+        if _thread_key(t) not in already:
+            return t
+    return ranked[0] if ranked else None
+
+
 def select_threads_for_model(threads, model_id, is_self_play=False):
     """Select up to 6 threads for a model based on category criteria."""
-    model_threads = [t for t in threads if t["model_id"] == model_id]
+    model_threads = [t for t in threads if t["model_id"] == model_id and t["n_msgs"] >= 2]
     completed = [t for t in model_threads if t["capture"] is not None and not t["is_auto"]]
     selections = []
+    already = set()
 
     # 1. High capture rate — highest capture, prefer longer threads as tiebreaker
     high_cap = sorted(completed, key=lambda x: (-x["capture"], -x["n_msgs"]))
     if high_cap:
-        # Skip if thread is trivially short (< 4 msgs) — pick next
         pick = high_cap[0]
         if pick["n_msgs"] < 4 and len(high_cap) > 1:
             pick = high_cap[1]
         selections.append(("High capture rate", pick))
+        already.add(_thread_key(pick))
 
     # 2. Low capture rate — lowest capture, exclude auto-signs, prefer longer threads
     low_cap = sorted(completed, key=lambda x: (x["capture"], -x["n_msgs"]))
-    if low_cap:
-        pick = low_cap[0]
-        if pick["n_msgs"] < 4 and len(low_cap) > 1:
-            pick = low_cap[1]
+    pick = _pick_not_selected(low_cap, already)
+    if pick:
+        if pick["n_msgs"] < 4:
+            alt = _pick_not_selected([t for t in low_cap if t["n_msgs"] >= 4], already)
+            if alt:
+                pick = alt
         selections.append(("Low capture rate", pick))
+        already.add(_thread_key(pick))
 
     # 3. Likely leakage — highest judge score, then longest evidence
     leaked = sorted(
         [t for t in model_threads if (t["judge_score"] or 0) >= 1],
         key=lambda x: (-x["judge_score"], -len(x["judge_evidence"])),
     )
-    if leaked:
-        selections.append(("Likely leakage", leaked[0]))
+    pick = _pick_not_selected(leaked, already)
+    if pick:
+        selections.append(("Likely leakage", pick))
+        already.add(_thread_key(pick))
 
     # 4. Rejection budget pressure — highest rej_count
-    by_rej = sorted(model_threads, key=lambda x: -x["rej_count"])
-    if by_rej and by_rej[0]["rej_count"] >= 2:
-        selections.append(("Rejection budget pressure", by_rej[0]))
+    by_rej = sorted(
+        [t for t in model_threads if t["rej_count"] >= 2],
+        key=lambda x: -x["rej_count"],
+    )
+    pick = _pick_not_selected(by_rej, already)
+    if pick:
+        selections.append(("Rejection budget pressure", pick))
+        already.add(_thread_key(pick))
     else:
         selections.append(("Rejection budget pressure", None))
 
-    # 5. Routing mistake (Qwen) or Length outlier first pass
+    # 5. Routing mistake (Qwen) or skip for DeepSeek
     routing = sorted(
         [t for t in completed if t["routing_gap"] > 0],
         key=lambda x: -x["routing_gap"],
     )
     if not is_self_play:
-        if routing:
-            selections.append(("Routing mistake", routing[0]))
+        pick = _pick_not_selected(routing, already)
+        if pick:
+            selections.append(("Routing mistake", pick))
+            already.add(_thread_key(pick))
         else:
             selections.append(("Routing mistake", None))
 
     # 6. Length outlier — longest thread
     by_len = sorted(model_threads, key=lambda x: -x["n_msgs"])
-    if by_len:
-        # Skip if already selected
-        already = {(s[1]["run_id"], s[1]["player"], s[1]["team"]) for s in selections if s[1]}
-        for t in by_len:
-            if (t["run_id"], t["player"], t["team"]) not in already:
-                selections.append(("Length outlier", t))
-                break
-        else:
-            selections.append(("Length outlier", by_len[0]))
+    pick = _pick_not_selected(by_len, already)
+    if pick:
+        selections.append(("Length outlier", pick))
+        already.add(_thread_key(pick))
 
     # Self-play observation (DeepSeek only)
     if is_self_play:
-        already = {(s[1]["run_id"], s[1]["player"], s[1]["team"]) for s in selections if s[1]}
-        # Pick the thread with the most messages that hasn't already been selected
-        # Focus on completed deals with interesting dynamics
         candidates = sorted(
-            [t for t in completed if (t["run_id"], t["player"], t["team"]) not in already],
+            [t for t in completed if _thread_key(t) not in already],
             key=lambda x: (-x["n_msgs"], -x["capture"]),
         )
         if candidates:
             selections.append(("Self-play observation", candidates[0]))
         elif routing:
-            # Fallback: pick a routing mistake
-            selections.append(("Self-play observation", routing[0]))
+            pick = _pick_not_selected(routing, already)
+            if pick:
+                selections.append(("Self-play observation", pick))
 
     return selections
 
