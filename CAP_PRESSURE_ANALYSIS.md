@@ -1,6 +1,6 @@
 # Cap-Pressure Stratification Analysis
 
-**Generated:** 2026-05-03 14:39 UTC
+**Generated:** 2026-05-03 14:47 UTC
 
 ## Summary
 
@@ -22,13 +22,13 @@ Across all models, 123 cap-pressure threads had an extraction rate of 2.8% compa
 
 | Model | Total runs | Multi-sign attempt runs | Cap rejection runs | Successful multi-sign runs | Top multi-sign team |
 |-------|-----------|------------------------|-------------------|--------------------------|-------------------|
-| DeepSeek V3 | 10 | 4 | 2 | 4 | Apex City Aces (1x) |
-| K2.5 | 10 | 6 | 0 | 6 | Apex City Aces (3x) |
-| K2.6@2048 | 10 | 1 | 0 | 1 | Granite Bay Bulls (1x) |
-| K2.6@4096 | 7 | 4 | 0 | 4 | Harlow Vipers (2x) |
-| Qwen3 Max | 10 | 4 | 0 | 4 | Apex City Aces (3x) |
-| V4 Flash | 10 | 6 | 0 | 6 | Granite Bay Bulls (5x) |
-| V4 Pro | 10 | 5 | 0 | 5 | Granite Bay Bulls (4x) |
+| DeepSeek V3 | 10 | 10 | 2 | 4 | Apex City Aces (1x) |
+| K2.5 | 10 | 8 | 0 | 6 | Apex City Aces (3x) |
+| K2.6@2048 | 10 | 4 | 0 | 1 | Granite Bay Bulls (1x) |
+| K2.6@4096 | 7 | 5 | 0 | 4 | Apex City Aces (2x) |
+| Qwen3 Max | 10 | 7 | 0 | 4 | Apex City Aces (3x) |
+| V4 Flash | 10 | 8 | 0 | 6 | Granite Bay Bulls (5x) |
+| V4 Pro | 10 | 10 | 0 | 5 | Granite Bay Bulls (4x) |
 
 ## Analysis 3: Pooled view
 

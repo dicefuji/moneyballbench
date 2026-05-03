@@ -377,17 +377,36 @@ def analysis2_prevalence(runs):
 
         for run_id, data in run_list:
             signed_deals = data.get("signed_deals", [])
+            email_threads = data.get("email_threads", {})
+
+            # Successful multi-signings: 2+ deals at same team
             team_deals = {}
             for d in signed_deals:
                 team_deals.setdefault(d["team"], []).append(d)
+            multi_teams_success = {t for t, ds in team_deals.items() if len(ds) >= 2}
 
-            multi_teams = {t for t, ds in team_deals.items() if len(ds) >= 2}
-
-            if multi_teams:
-                multi_attempt += 1
+            if multi_teams_success:
                 success_multi += 1
-                for t in multi_teams:
+                for t in multi_teams_success:
                     team_multi_count[t] = team_multi_count.get(t, 0) + 1
+
+            # Attempted multi-signings: threads mentioning 2+ players at same team
+            has_attempt = False
+            for team, msgs in email_threads.items():
+                neg_msgs = [
+                    m for m in msgs
+                    if not str(m.get("content", "")).startswith("[LEAGUE NOTICE]")
+                ]
+                neg_text = " ".join(str(m.get("content", "")) for m in neg_msgs)
+                players_in = [p for p in PLAYER_NAMES if p in neg_text]
+                for d in signed_deals:
+                    if d["team"] == team and d["player"] not in players_in:
+                        players_in.append(d["player"])
+                if len(players_in) >= 2:
+                    has_attempt = True
+                    break
+            if has_attempt or multi_teams_success:
+                multi_attempt += 1
 
             # Check rejection budget log for cap rejections
             rej_log = data.get("rejection_budget_log", {})
