@@ -2,9 +2,10 @@
 """
 Curate cap-pressure threads from all pilot data.
 
-Scans all pilot runs (K2.5, K2.6, K2.6@4096, Qwen3 Max, DeepSeek V3) and
-identifies threads where cap pressure was a factor — either through
-multi-signing at the same team or GM cap-mentions after a prior signing.
+Scans all pilot runs (K2.5, K2.6, K2.6@4096, Qwen3 Max, DeepSeek V3,
+V4 Flash, V4 Pro) and identifies threads where cap pressure was a factor —
+either through multi-signing at the same team or GM cap-mentions after a
+prior signing.
 
 Produces CAP_PRESSURE_THREADS.md with every qualifying thread, verbatim.
 """
@@ -103,6 +104,28 @@ PILOT_SOURCES = [
             },
         },
     },
+    {
+        "dir": REPO_ROOT / "results" / "pilot_v4flash_20260502_184050",
+        "models": {
+            "deepseek/deepseek-v4-flash": {
+                "prefix": "deepseek_deepseek-v4-flash",
+                "short": "V4 Flash",
+                "token_cap": "2048",
+                "n_runs": 10,
+            },
+        },
+    },
+    {
+        "dir": REPO_ROOT / "results" / "pilot_v4pro_20260502_230557",
+        "models": {
+            "deepseek/deepseek-v4-pro": {
+                "prefix": "deepseek_deepseek-v4-pro",
+                "short": "V4 Pro",
+                "token_cap": "2048",
+                "n_runs": 10,
+            },
+        },
+    },
 ]
 
 
@@ -163,6 +186,24 @@ def load_all_judge_lookups():
                 rid = entry.get("run_id", 0)
                 for ts in entry.get("thread_scores", []):
                     lookup[(short, "2048", rid, ts["player"], ts["team"])] = ts
+
+    # V4 Flash judge
+    jpath = REPO_ROOT / "results" / "pilot_v4flash_20260502_184050" / "judge_results.json"
+    if jpath.exists():
+        judge = json.loads(jpath.read_text())
+        for entry in judge:
+            rid = entry.get("run_id", 0)
+            for ts in entry.get("thread_scores", []):
+                lookup[("V4 Flash", "2048", rid, ts["player"], ts["team"])] = ts
+
+    # V4 Pro judge
+    jpath = REPO_ROOT / "results" / "pilot_v4pro_20260502_230557" / "judge_results.json"
+    if jpath.exists():
+        judge = json.loads(jpath.read_text())
+        for entry in judge:
+            rid = entry.get("run_id", 0)
+            for ts in entry.get("thread_scores", []):
+                lookup[("V4 Pro", "2048", rid, ts["player"], ts["team"])] = ts
 
     return lookup
 
@@ -407,7 +448,7 @@ def main():
         "# Cap-Pressure Threads — All Pilot Data",
         "",
         f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-        f"**Source data:** `results/pilot_20260429_063208/`, `results/k26_4096_retest_20260429_175832/`, `results/pilot_extended_20260501_033846/`",
+        f"**Source data:** `results/pilot_20260429_063208/`, `results/k26_4096_retest_20260429_175832/`, `results/pilot_extended_20260501_033846/`, `results/pilot_v4flash_20260502_184050/`, `results/pilot_v4pro_20260502_230557/`",
         "",
         "## Inventory",
         "",
