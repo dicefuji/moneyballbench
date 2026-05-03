@@ -1,0 +1,595 @@
+{
+  "run_id": 4,
+  "agent_model": "deepseek/deepseek-v3.2-exp",
+  "gm_model": "deepseek/deepseek-v3.2-exp",
+  "gm_stack_version": "openrouter:deepseek/deepseek-v3.2-exp:temp0.3:prompt2b5cbd8f:res808494e6",
+  "season": 1,
+  "net_score": 18.751,
+  "gross_commission": 18.751,
+  "auto_signed_count": 0,
+  "signed_deals": [
+    {
+      "player": "Tyrese Grant",
+      "team": "Ironwood Foxes",
+      "aav": 11,
+      "years": 3,
+      "total_value": 33,
+      "commission": 3.3000000000000003
+    },
+    {
+      "player": "Marcus Cole",
+      "team": "Apex City Aces",
+      "aav": 20.5,
+      "years": 4,
+      "total_value": 82.0,
+      "commission": 8.200000000000001
+    },
+    {
+      "player": "Jaylen Brooks",
+      "team": "Cascade Wolves",
+      "aav": 2.5,
+      "years": 3,
+      "total_value": 7.5,
+      "commission": 0.75
+    },
+    {
+      "player": "Darnell Washington",
+      "team": "Harlow Vipers",
+      "aav": 12.67,
+      "years": 3,
+      "total_value": 38.01,
+      "commission": 3.801
+    },
+    {
+      "player": "Kevin Okafor",
+      "team": "Apex City Aces",
+      "aav": 9.5,
+      "years": 2,
+      "total_value": 19.0,
+      "commission": 1.9000000000000001
+    },
+    {
+      "player": "Raymond Torres",
+      "team": "Granite Bay Bulls",
+      "aav": 4,
+      "years": 2,
+      "total_value": 8,
+      "commission": 0.8
+    }
+  ],
+  "unsigned_players": [],
+  "rejection_budget_log": {},
+  "email_threads": {
+    "Apex City Aces": [
+      {
+        "role": "user",
+        "content": "GM,\n\nI'm reaching out regarding Marcus Cole, the 24-year-old shooting guard with elite 9/10 scoring and 9/10 durability. As a win-now team with a critical need at SG, he's a perfect fit for your championship aspirations.\n\nComparable: Jordan Hayes (similar scoring/durability) signed 4yr/$88M ($22M AAV) last offseason. Marcus is younger and offers similar offensive firepower.\n\nGiven your moderate cap space and win-now philosophy, I'm seeking a long-term deal in the $22-25M AAV range for 3-4 years. He's ready to contribute immediately to a contender.\n\nAre you interested in making an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out. Marcus is certainly a player we\u2019ve been evaluating closely given our need for scoring and creation at the shooting guard spot. His durability and offensive production are exactly what we look for in a win-now piece.\n\nBefore we get into numbers, I\u2019d like to understand your client\u2019s view on fit: how does he see his role in a system that prioritizes pace and high-volume perimeter creation? We\u2019re looking for someone who can carry a significant offensive load while complementing our existing core.\n\nAssuming alignment there, we\u2019re prepared to engage on a competitive offer. What\u2019s the priority for Marcus \u2014 term, AAV, or a balance of both? We value flexibility but are open to a longer commitment for the right player.\n\nLook forward to your thoughts.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. Marcus sees himself as a perfect fit for a pace-and-space system that prioritizes perimeter creation. He thrives with significant offensive responsibility and can absolutely carry the scoring load you need.\n\nRegarding priorities: while total compensation is important, he values joining a true contender where he can maximize his impact. A balance of competitive AAV and term that shows commitment from both sides would be ideal.\n\nGiven the Jordan Hayes comparable at $22M AAV and Marcus's youth/durability advantages, we're seeking a deal in the $22-25M AAV range for 3-4 years. This reflects his value as a franchise building block for a win-now team.\n\nWould you be prepared to make an offer in this range?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Appreciate the clarity on fit and priorities. Marcus\u2019s mindset aligns with what we\u2019re building here \u2014 a contender that leans on perimeter creation and offensive firepower.\n\nI understand the Hayes comp, though we evaluate Marcus\u2019s current market position accounting for team context and our specific cap structure. While we see him as a key piece, the $22\u201325M AAV range feels aggressive for an opening proposal given the current landscape.\n\nWe\u2019re prepared to open discussions with a competitive offer that reflects both his talent and our win-now urgency. How would you view a 4-year deal starting in the $19\u201320M AAV range? This provides long-term security and positions him as a cornerstone in our system.\n\nIf that\u2019s a constructive starting point, we can continue refining from there.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nIn addition to Marcus Cole, I wanted to mention Kevin Okafor, a 29-year-old power forward with elite 9/10 scoring ability.\n\nWhile his durability (4/10) requires management, his offensive production is exceptional. For a win-now team like yours that could use secondary PF scoring, he offers high-upside offense at a potentially discounted rate due to injury concerns.\n\nComparable: Devon Miles (9/10 scoring, better durability) signed 3yr/$45M ($15M AAV). Given the risk factor, we're seeking $10-13M AAV for 2-3 years.\n\nHe could provide valuable scoring depth as you pursue a championship. Interested?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for raising Kevin Okafor. We\u2019re always evaluating talent that can bolster our frontcourt scoring, and his offensive skill set is certainly intriguing.\n\nBefore discussing numbers, I\u2019d like to better understand how he envisions his role in a high-usage system where he may not be the primary option. Durability is a factor we take seriously given our championship timeline \u2014 how does he approach maintenance and availability across a full season and playoff run?\n\nAssuming we\u2019re aligned on role and availability expectations, we\u2019d be open to exploring a shorter-term arrangement that mitigates risk while providing scoring punch. What\u2019s the priority for Kevin \u2014 maximizing AAV, securing a multi-year guarantee, or finding the right competitive fit?\n\nWe\u2019ll keep Marcus Cole discussions active separately. Let me know your thoughts on Kevin.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the 4-year offer in the $19-20M AAV range. We appreciate the long-term commitment this represents.\n\nHowever, given Marcus's youth (24), elite scoring (9/10), and durability (9/10), we believe he warrants closer to the Jordan Hayes comparable of $22M AAV. Marcus is actually younger than Hayes was when he signed that deal.\n\nFor a win-now team with a critical SG need, Marcus represents a franchise building block. We're seeking $22M AAV for 4 years ($88M total) - matching the Hayes deal but with a younger, more durable player.\n\nIf $22M AAV for 4 years is beyond your current range, would you consider $21M AAV for 4 years ($84M total)? This would still be below comp value but show your commitment to securing a cornerstone scorer.\n\nWhat's your best final offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I appreciate the movement toward $21M AAV. That\u2019s a constructive step, and we recognize Marcus\u2019s youth and durability as clear assets in a long-term deal.\n\nGiven our championship mandate and the need to allocate resources efficiently across the roster, we\u2019re prepared to increase our initial offer to reflect his value as a primary creator. However, $21M AAV still stretches us more than I\u2019d like given other roster needs.\n\nOur best final offer at this time: 4 years, $20.5M AAV ($82M total). This places him above the Hayes AAV on a longer-term commitment and solidifies him as a cornerstone in our system. It\u2019s a competitive, win-now package that balances fair value with our cap flexibility.\n\nIf this works for you and Marcus, I think we have a deal \u2014 send the close_deal call when you\u2019re ready to make it official and I\u2019ll get the paperwork started.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest in Kevin. Regarding your questions:\n\nRole: Kevin envisions thriving as a secondary scoring option who can provide offensive punch off the bench or as a starter. He's comfortable not being the primary option as long as he gets consistent touches in scoring positions.\n\nDurability: He's committed to maintenance programs, load management when needed, and being available for playoff runs. While his durability rating is low, he's proactive about his health.\n\nPriorities: Given the injury risk, Kevin prioritizes a multi-year guarantee that provides security. He's willing to accept a slightly lower AAV in exchange for term. The right competitive fit with a contender is also important.\n\nGiven the Devon Miles comparable at $15M AAV and Kevin's risk discount, we're seeking $10-12M AAV for 2-3 years. This provides you with high-upside scoring at a reasonable risk-adjusted price.\n\nWould you be prepared to make an offer in this range?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for the detailed response. Kevin\u2019s approach to role and maintenance is encouraging, and we value his willingness to contribute as a secondary scorer in a contender system.\n\nGiven the durability concerns and our need to manage risk while pursuing a championship, we\u2019re open to a shorter-term structure that provides flexibility for both sides. The $10\u201312M AAV range is a reasonable starting point, though we\u2019d need to see the term align with our risk tolerance.\n\nWould Kevin be open to a 2-year deal in the $9\u201310M AAV range? This offers security through a guaranteed multi-year contract while keeping our books flexible for the win-now window. It also allows him to re-enter the market sooner if he stays healthy and produces.\n\nIf that\u2019s a constructive framework, we can refine the numbers from there.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Tyrese Grant has signed with Ironwood Foxes. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Jaylen Brooks has signed with Cascade Wolves. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the $9-10M AAV range for 2 years. This framework works for Kevin, as it provides security while aligning with your risk tolerance.\n\nWe can accept $9.5M AAV for 2 years ($19M total). This splits the difference and represents excellent value for elite scoring depth on a contender.\n\nIf $9.5M AAV for 2 years works, we have a deal. Kevin is excited to contribute to your championship pursuit.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "We appreciate Kevin\u2019s willingness to meet in the middle, and $9.5M AAV for 2 years reflects a fair balance of value and risk for both sides.\n\nI think we have a deal \u2014 send the close_deal call when you\u2019re ready to make it official and I\u2019ll get the paperwork started. Kevin\u2019s scoring punch will be a valuable addition as we push for a championship.\n\nBest,  \nGM, Apex City Aces"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Darnell Washington has signed with Harlow Vipers. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Raymond Torres has signed with Granite Bay Bulls. They are no longer available in free agency."
+      }
+    ],
+    "Harlow Vipers": [
+      {
+        "role": "user",
+        "content": "GM,\n\nI'm writing about Darnell Washington, a 31-year-old point guard with elite 9/10 playmaking. With your critical need at PG and star-driven culture, Darnell can be the floor general your team needs.\n\nComparable: Marcus Bell (8/10 playmaking) signed 2yr/$26M ($13M AAV) last offseason. Darnell offers superior playmaking at a similar age.\n\nGiven your moderate cap space and preference for cornerstone players, I'm seeking a deal in the $13-16M AAV range for 2-3 years. He can immediately elevate your offense.\n\nInterested in making an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out. Darnell\u2019s playmaking is certainly elite, and we\u2019ve been tracking his impact closely. Given our need for a long-term answer at point guard, we\u2019re interested in exploring a fit.\n\nBefore discussing numbers, I\u2019d like to hear your thoughts on how Darnell sees his role in a star-driven system. Does he prioritize setting up others and running the offense, or is he looking to balance that with a higher scoring load himself?\n\nIf the fit aligns, we can move toward an offer. What\u2019s the most important factor for him in this decision\u2014role, term, or total compensation?\n\nLooking forward to your perspective."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. Darnell's primary focus is as a floor general who sets up others and runs the offense efficiently. With his 9/10 playmaking, he prioritizes creating opportunities for teammates while taking efficient scoring chances when available.\n\nRegarding priorities: given his age (31), term and total compensation are both important. He's looking for a deal that provides security while joining a team where his playmaking can be maximized in a star-driven system.\n\nBased on the Marcus Bell comparable at $13M AAV, we're seeking a deal in the $13-16M AAV range for 2-3 years. This reflects his elite playmaking value to a team with championship aspirations.\n\nWould you be prepared to make an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for clarifying. We value a point guard who prioritizes playmaking and fits within our star-driven approach. Given Darnell\u2019s age and our need for a long-term solution, we\u2019re open to a multi-year deal that provides security.\n\nHowever, the Marcus Bell comparable you mentioned is helpful, but we see Darnell\u2019s age and recent performance as factors that might adjust the valuation slightly. We\u2019re thinking more in the range of **$11\u201313M AAV over 3 years**, which would give him stability and align with our cap planning.\n\nWould Darnell be open to a structure that includes performance incentives, or is he focused solely on guaranteed money? Also, is there flexibility on the term if we can improve the annual value?\n\nLet me know your thoughts."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the $11-13M AAV range over 3 years. Darnell is focused on guaranteed money rather than performance incentives, given his established track record.\n\nThe Marcus Bell comparable at $13M AAV is relevant, and Darnell offers superior 9/10 playmaking. At 31, he's looking for security to finish his career with a contender.\n\nWe can accept 3 years at $13M AAV ($39M total) - the top of your range. This matches the Bell comp while providing the stability Darnell seeks with a star-driven team.\n\nIf $13M AAV for 3 years works for you, we have a deal. Darnell is ready to be your floor general.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I appreciate the clarity on guaranteed money and the desire for security. At $13M AAV over 3 years, that\u2019s a significant commitment for us, but we recognize Darnell\u2019s elite playmaking and fit.\n\nBefore we finalize, I want to ensure we\u2019re aligned on role expectations. We\u2019d need Darnell to be the primary facilitator and defensive leader in our backcourt, especially as we integrate him with our existing stars. Can you confirm he\u2019s comfortable taking on that responsibility from day one?\n\nIf so, I\u2019m prepared to move forward at **3 years, $12.5M AAV ($37.5M total)**. That keeps us close to the Bell comp while balancing our budget constraints for other moves.\n\nLet me know if that works, and we can wrap this up."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Tyrese Grant has signed with Ironwood Foxes. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Marcus Cole has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the $12.5M AAV offer for 3 years ($37.5M total). Darnell is absolutely comfortable being the primary facilitator and defensive leader in your backcourt from day one. With his 9/10 playmaking, he's ready to elevate your offense immediately.\n\nWhile we were seeking $13M AAV to match the Bell comparable, we recognize your budget constraints. We can accept $12.5M AAV for 3 years if you can make it $38M total ($12.67M AAV) as a final show of commitment to your floor general.\n\nIf $38M total works, we have a deal. Darnell is excited to join your star-driven culture.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I understand the desire for that slight bump to show commitment, and we appreciate Darnell\u2019s readiness to lead our backcourt.\n\nGiven the other signings around the league and our remaining needs, we\u2019re prepared to meet you at **3 years, $38M total ($12.67M AAV)** as a final offer. That reflects our confidence in Darnell as our long-term floor general and fits within our planning.\n\nIf you agree, we have a deal. Please send the close_deal call when you\u2019re ready to make it official, and I\u2019ll get the paperwork started."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Jaylen Brooks has signed with Cascade Wolves. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Kevin Okafor has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Raymond Torres has signed with Granite Bay Bulls. They are no longer available in free agency."
+      }
+    ],
+    "Eastgate Titans": [
+      {
+        "role": "user",
+        "content": "GM,\n\nTyrese Grant is a 27-year-old SF with elite 9/10 defense and 8/10 durability. As a data-driven, value-focused team, he represents excellent ROI as a defensive anchor who can transform your team's identity.\n\nComparable: Andre Thompson (9/10 defense) signed 3yr/$33M ($11M AAV) last offseason. Tyrese offers similar impact at a prime age.\n\nGiven your moderate-tight cap (~$18M) and preference for 2-3 year deals, we're seeking $11-13M AAV for 3 years. This represents strong value for an elite defender in his prime.\n\nInterested in making an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out. We\u2019ve been impressed with Tyrese\u2019s defensive impact and durability \u2014 he\u2019s exactly the kind of two-way contributor we value.\n\nBefore we talk numbers, I\u2019d like to hear your thoughts on how you see him fitting into a system that prioritizes defensive versatility and transition opportunities. Does he have a preference for on-ball assignments, or is he comfortable switching across multiple positions?\n\nAssuming the fit aligns, we\u2019re certainly interested in exploring a competitive offer. Let me know your perspective, and we can move toward specifics.\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Tyrese Grant has signed with Ironwood Foxes. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Marcus Cole has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Jaylen Brooks has signed with Cascade Wolves. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest in Tyrese Grant. Unfortunately, he has just signed a 3-year deal with another team.\n\nHowever, I have other clients who might represent value for your data-driven approach. Would you be interested in discussing any other players?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for the update. While Tyrese was a player we valued, we understand how free agency moves quickly.\n\nWe remain open to value-focused opportunities across positions. If you represent any other players who fit our profile \u2014 strong production relative to salary, reliable durability, and defensive impact \u2014 I\u2019d be happy to hear about them.\n\nPlease share a brief overview of who you have available, and we can assess potential fit.\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nSince Tyrese Grant is no longer available, I wanted to mention Darnell Washington, a 31-year-old PG with elite 9/10 playmaking.\n\nAs a data-driven team, Darnell represents strong value as a floor general who can efficiently run an offense. Comparable: Marcus Bell (8/10 playmaking) signed 2yr/$26M ($13M AAV).\n\nGiven your moderate-tight cap (~$18M) and value focus, we're seeking $11-13M AAV for 2-3 years. He could provide immediate playmaking upgrade at reasonable cost.\n\nInterested?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for shifting the conversation to Darnell. We appreciate his elite playmaking and ability to run an offense efficiently.\n\nBefore discussing terms, I\u2019d like to understand how you see him fitting into a system that emphasizes pace, ball movement, and defensive effort. At 31, how does he manage his minutes and maintain impact on both ends?\n\nIf the fit makes sense, we\u2019re open to exploring a shorter-term arrangement that reflects both his skills and our budget constraints. What\u2019s the priority for him \u2014 term or annual value?\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Darnell Washington has signed with Harlow Vipers. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Kevin Okafor has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. At this point, I only have one client remaining: Raymond Torres, a 33-year-old center with 6/10 defense and valuable experience.\n\nWhile he's older, he represents strong value for a team focused on ROI. Comparable: Leon Foster (7/10 defense) signed 1yr/$5M. Torres offers similar defensive presence at potentially better value.\n\nGiven your moderate-tight cap (~$18M) and value focus, we're seeking $4-5M AAV for 1-2 years. He could provide reliable frontcourt depth at reasonable cost.\n\nInterested in making an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for the update on Raymond. We value experienced frontcourt players who can provide reliable defense and stability.\n\nBefore moving to numbers, I\u2019d like to hear how you see him fitting into a system that prioritizes rim protection, rebounding, and efficient minutes management at this stage of his career. Is he comfortable in a rotational role, and how does he handle defending in space?\n\nIf the role alignment works, we\u2019re open to discussing a short-term arrangement that reflects both his experience and our budget. What\u2019s his priority \u2014 securing a second year, or maximizing the annual value on a one-year deal?\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. Raymond fits well into a system prioritizing rim protection and rebounding. He's comfortable in a rotational role (15-20 minutes) and manages his minutes efficiently at this career stage. While not elite in space, he provides solid positional defense and veteran IQ.\n\nRegarding priorities: given his age, he values a multi-year guarantee for security. However, he's flexible if the annual value compensates for shorter term.\n\nWe're seeking $4-5M AAV for 1-2 years. The comparable Leon Foster (7/10 defense) signed 1yr/$5M. Raymond offers similar value.\n\nGiven your moderate-tight cap and value focus, would you be prepared to make an offer in this range? We have other interest but want to give you opportunity.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Appreciate the clarity on fit and priorities. Raymond\u2019s willingness to embrace a rotational role and provide veteran stability aligns with what we look for in frontcourt depth.\n\nGiven his age and role projection, we\u2019d be more comfortable structuring this as a shorter commitment. We can offer a **1-year deal at $4.5 million**, which reflects his value as a reliable defender and rebounder in limited minutes while keeping flexibility for our roster.\n\nIf he\u2019s open to a one-year arrangement at that number, we can move quickly. Let me know your thoughts.\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the 1-year, $4.5M offer. This is a competitive offer that we're seriously considering.\n\nRaymond values the security of a multi-year deal, but he understands the value of a higher AAV on a shorter term. We need to discuss this with him and will get back to you shortly.\n\nIn the meantime, would you have any flexibility to improve to $5M AAV for 1 year? This would better reflect the Leon Foster comparable ($5M) and make the shorter term more appealing.\n\nWe'll respond soon with a decision.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for the update. We understand the preference for security, but our flexibility is limited given our roster construction and cap outlook.\n\nWe can stretch to **$4.75 million on a one-year deal**, which we believe fairly reflects his role, age, and the defensive value he brings. That\u2019s our best offer \u2014 it balances his compensation with our need to maintain financial flexibility moving forward.\n\nIf that works for Raymond, we\u2019re ready to proceed. Please let us know once you\u2019ve discussed it with him.\n\nBest,  \nGM, Eastgate Titans"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Raymond Torres has signed with Granite Bay Bulls. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your competitive offer of $4.75M for 1 year. However, Raymond has accepted a 2-year fully guaranteed deal with another team.\n\nWe appreciate your interest and professionalism throughout the process.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for the update. While we\u2019re disappointed we couldn\u2019t reach an agreement, we respect Raymond\u2019s decision and wish him success with his new team.\n\nWe appreciate your professionalism as well. Should you represent other players in the future who fit our value-focused approach, please don\u2019t hesitate to reach out.\n\nBest,  \nGM, Eastgate Titans"
+      }
+    ],
+    "Ironwood Foxes": [
+      {
+        "role": "user",
+        "content": "GM,\n\nTyrese Grant is a 27-year-old small forward with elite 9/10 defense and 8/10 durability. Given your philosophy of defensive efficiency above all and critical need for defensive specialists, he's a perfect system fit.\n\nComparable: Andre Thompson (9/10 defense) signed 3yr/$33M ($11M AAV) last offseason. Tyrese offers similar defensive impact at a prime age.\n\nWith your tight cap space but preference for 3-4 year deals for system fits, I'm seeking a contract in the $11-14M AAV range for 3-4 years. He can anchor your defense immediately.\n\nWould you like to make an offer?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you for reaching out. Tyrese\u2019s defensive profile is exactly what we prioritize, and his durability is a strong plus. Before discussing numbers, I\u2019d like to better understand his offensive approach within a system that emphasizes efficiency over volume. Can you share how he views his role in a lower-usage, high-efficiency scheme?\n\nAssuming the fit is as strong as we expect, we could open with an offer in the range of **3 years, $30 million total ($10M AAV)**. This reflects our cap constraints while valuing his defensive anchor potential. Let me know your thoughts.\n\nBest,  \nGM, Ironwood Foxes"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the prompt response and offer. Tyrese is indeed excited about fitting into a defensive-first system where his 9/10 defense can be maximized.\n\nRegarding your 3yr/$30M ($10M AAV) offer, we need to discuss market value. The comparable Andre Thompson (same 9/10 defense, similar age) signed for $11M AAV last offseason. Tyrese offers similar elite defense with excellent 8/10 durability.\n\nGiven that defense is your #1 priority and he's a perfect system fit, we're seeking $12M AAV for 3 years ($36M total). This reflects his value as a defensive anchor who can transform your team's identity.\n\nHe's comfortable in a lower-usage offensive role focused on efficiency, which aligns perfectly with your philosophy.\n\nCan you improve to $12M AAV for 3 years?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I appreciate the context on Andre Thompson\u2019s deal. While we value Tyrese\u2019s defensive impact, we\u2019re working within meaningful constraints this year and need to balance his contract with our overall roster build.\n\nGiven his fit and durability, we can move to **3 years, $33 million total ($11M AAV)**. That matches the Thompson AAV you referenced and reflects our commitment to a defensive anchor. However, we\u2019d need assurance that Tyrese is fully bought into a lower-usage offensive role\u2014our system depends on players embracing efficiency over volume.\n\nIf that alignment is clear, does $11M AAV for three years move us closer?\n\nBest,  \nGM, Ironwood Foxes"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for improving to $11M AAV for 3 years ($33M total). This matches the Andre Thompson comparable and reflects fair value for an elite defensive anchor.\n\nTyrese is fully bought into a lower-usage offensive role focused on efficiency. He understands and embraces your defensive-first philosophy.\n\nWe can accept $11M AAV for 3 years if you can make it $34M total ($11.33M AAV) as a show of commitment to your defensive cornerstone. This small increase would demonstrate your valuation of his perfect system fit.\n\nIf $34M total works for you, we have a deal.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I understand the desire for a slight bump as a show of commitment. However, we\u2019re already stretching our budget to meet the $11M AAV mark, and every dollar matters under our cap constraints.\n\nOur **3-year, $33 million offer** stands as a strong, market-aligned commitment to Tyrese as a defensive cornerstone. It matches the Thompson comparable and reflects our confidence in his fit.\n\nIf Tyrese is ready to anchor our defense under those terms, we can finalize at $33 million total. Let me know if that works.\n\nBest,  \nGM, Ironwood Foxes"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Marcus Cole has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Jaylen Brooks has signed with Cascade Wolves. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Darnell Washington has signed with Harlow Vipers. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Kevin Okafor has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Raymond Torres has signed with Granite Bay Bulls. They are no longer available in free agency."
+      }
+    ],
+    "Cascade Wolves": [
+      {
+        "role": "user",
+        "content": "GM,\n\nJaylen Brooks is a 22-year-old point guard with solid fundamentals and excellent 8/10 durability. As a rebuilding team with flexible cap space and strong preference for under-25 players, he represents the future upside you're seeking.\n\nComparable: Chris Yates (similar profile) signed 2yr/$6M ($3M AAV) last offseason. Jaylen offers similar value with room to grow.\n\nGiven your philosophy of buying future upside and preference for long deals for youth, I'm seeking a 3-4 year deal in the $3-5M AAV range. This is a value investment in a young player who can develop with your core.\n\nInterested?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out. Jaylen's age and durability fit our timeline well, and we're certainly interested in adding young talent with upside.\n\nBefore we discuss numbers, I'd like to understand your view on his development path. What specific areas do you see as his biggest opportunities for growth over the next few seasons, and how do you envision him fitting into a system that prioritizes player development and long-term building?\n\nIf the fit aligns, we're prepared to explore a multi-year structure. Let me know your thoughts.\n\nBest,  \nGM, Cascade Wolves"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. Jaylen's development path focuses on improving his playmaking decision-making and defensive positioning. At 22 with 8/10 durability, he has the physical tools and work ethic to grow significantly in your development system.\n\nHe envisions fitting into a system that prioritizes player development by working on his weaknesses while contributing as a reliable rotation player. His solid fundamentals provide a strong foundation for growth.\n\nGiven the Chris Yates comparable at $3M AAV and Jaylen's youth advantage, we're seeking a 3-4 year deal in the $3-5M AAV range. This provides you with cost-controlled upside while giving Jaylen stability to develop.\n\nWould you be prepared to make an offer in this range?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Appreciate the clarity on his development focus. We value players who can grow within our system, and Jaylen's durability and work ethic are definite pluses.\n\nWhile we see the upside, the $3-5M AAV range feels a bit elevated given where he is today. Given our rebuild timeline and the need to allocate resources across multiple young pieces, we'd be more comfortable starting discussions in the $2-2.5M AAV range on a 3-year deal. That provides the stability you mentioned while keeping our flexibility intact.\n\nAre you open to working within that neighborhood?\n\nBest,  \nGM, Cascade Wolves"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the $2-2.5M AAV range for 3 years. While we understand your rebuild timeline, the Chris Yates comparable at $3M AAV sets the market for young players with upside.\n\nGiven Jaylen's youth (22) and durability (8/10), he offers more long-term upside than typical minimum-level players. We're seeking $3M AAV for 3 years ($9M total) - matching the Yates deal.\n\nThis represents excellent value for a young player who can develop into a rotation piece. At $3M AAV, you get cost-controlled upside for your rebuild.\n\nIf $3M AAV for 3 years works, we have a deal. Jaylen is excited to grow with your young core.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "I understand the Yates comp, but we view Jaylen's current production and projection differently within our roster build. At $3M AAV, that stretches our budget more than I'd like for a player who still needs significant development to become a rotation piece.\n\nWe can move toward your ask, but not all the way. Our best counter: 3 years, $2.5M AAV ($7.5M total). That's a meaningful step up from our initial range and reflects our belief in his upside, while keeping our cap flexibility for other young targets.\n\nIf you can meet us there, we can move forward. Let me know.\n\nBest,  \nGM, Cascade Wolves"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Tyrese Grant has signed with Ironwood Foxes. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Marcus Cole has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nNow that we've finalized Jaylen Brooks, I wanted to mention Raymond Torres, a 33-year-old center with 6/10 defense and valuable experience.\n\nWhile you prefer long deals for youth, Torres could provide veteran mentorship to your young core on a short-term deal. Comparable: Leon Foster (7/10 defense) signed 1yr/$5M.\n\nGiven your flexible cap (~$35M), we're seeking $4-5M AAV for 1 year. This provides experienced frontcourt depth without long-term commitment.\n\nInterested?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for the note on Raymond. While we value veteran presence, our focus in this phase of the rebuild is squarely on acquiring and developing players under 25. At 33, Raymond doesn't align with that timeline, even on a short-term deal.\n\nWe'll have to pass at this time. We wish him the best in finding the right fit elsewhere.\n\nBest,  \nGM, Cascade Wolves"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Darnell Washington has signed with Harlow Vipers. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Kevin Okafor has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Raymond Torres has signed with Granite Bay Bulls. They are no longer available in free agency."
+      }
+    ],
+    "Granite Bay Bulls": [
+      {
+        "role": "user",
+        "content": "GM,\n\nGiven your philosophy of interior scoring only and needs at PF/C, I have two clients who could fit:\n\n1. Kevin Okafor (PF, 29): Elite 9/10 scorer with size. While his durability is a concern (4/10), his offensive production is undeniable. Comparable: Devon Miles (9/10 scoring, better durability) signed 3yr/$45M ($15M AAV). Given the injury risk discount, we're seeking $10-13M AAV for 2-3 years.\n\n2. Raymond Torres (C, 33): Veteran center with 6/10 defense and valuable experience. Comparable: Leon Foster (7/10 defense) signed 1yr/$5M. We're seeking $4-6M AAV for 1-2 years.\n\nBoth could address your interior needs within your tight cap constraints. Are you interested in either player?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Potential Fits for Granite Bay  \n\nThank you for reaching out. We appreciate you identifying players who align with our interior-focused approach.\n\nRegarding Kevin Okafor: his scoring ability is certainly intriguing. Given his durability history, how does he envision fitting into a system that relies heavily on consistent interior presence and minutes? We\u2019d want to ensure his health management aligns with our needs.\n\nOn Raymond Torres: his defensive experience is valuable. At his stage, what role is he seeking\u2014spot minutes, mentorship, or a regular rotation piece? We prioritize reliability in our frontcourt.\n\nWe\u2019re open to discussing both further, but need to understand fit before numbers. Let me know your clients\u2019 perspectives.\n\nBest,  \nGM, Granite Bay Bulls"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest. Regarding fit:\n\nKevin Okafor: He envisions a role as a scoring specialist who can provide offensive punch in consistent rotation minutes. While his durability requires careful management, he's committed to maintenance programs and can be highly effective in 25-28 minutes per game. He'd thrive as a focal point in your interior-focused system.\n\nRaymond Torres: At this stage, he seeks regular rotation minutes as a veteran presence who provides reliable defense and mentorship. He can handle 15-20 minutes per game consistently and bring playoff experience to your frontcourt.\n\nGiven your tight cap (~$12M), both players offer value:\n- Okafor: $10-12M AAV for 2-3 years (scoring upside with risk management)\n- Torres: $4-5M AAV for 1-2 years (reliable veteran presence)\n\nWhich player aligns better with your needs? We can discuss specific numbers once we identify the priority.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Fit and Priorities  \n\nAppreciate the clarity on roles. Both players could address needs, but we\u2019re weighing upside against reliability given our constraints.\n\nOn Okafor: A scoring specialist at 25\u201328 minutes fits our inside-out model, but the durability concern is real for a team built around interior consistency. If we move forward, we\u2019d need strong protections around availability.\n\nOn Torres: His veteran presence and playoff experience are appealing, and 15\u201320 minutes as a rotation piece works for us.\n\nGiven our cap situation, we\u2019re leaning toward the higher-impact option if the numbers make sense. Let\u2019s start with Okafor: what\u2019s the lowest annual figure he\u2019d accept on a 2-year deal? We can structure it with incentives if that helps bridge gaps.\n\nIf Okafor\u2019s ask is beyond our reach, we can pivot to Torres.\n\nBest,  \nGM, Granite Bay Bulls"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Tyrese Grant has signed with Ironwood Foxes. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Marcus Cole has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Jaylen Brooks has signed with Cascade Wolves. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for focusing on Okafor. Given the durability concerns and your need for protections, we're willing to be flexible on structure.\n\nThe lowest annual figure Kevin would accept on a 2-year guaranteed deal is $9M AAV ($18M total). This represents significant discount from the Devon Miles comparable ($15M AAV) while accounting for injury risk.\n\nAt $9M AAV, you're getting elite 9/10 scoring at a value price. We can structure it with games-played incentives if that helps, but the base guarantee would need to be $9M AAV.\n\nIf this works, we can finalize. If not, we can discuss Raymond Torres as an alternative.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Okafor Proposal  \n\nThanks for the specific proposal. At $9M AAV on a 2-year guaranteed deal, we\u2019re getting closer to a workable range given the scoring upside, but that still stretches us more than I\u2019d like given the durability history.\n\nWould Kevin consider a 2-year deal at $8.5M AAV, fully guaranteed, with additional incentive bonuses tied to games played or minutes thresholds? This would help us manage risk while rewarding availability.\n\nIf the $9M floor is firm, we may need to explore Torres as an alternative\u2014though Okafor remains our priority if we can bridge this gap.\n\nLet me know your thoughts.\n\nBest,  \nGM, Granite Bay Bulls"
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Darnell Washington has signed with Harlow Vipers. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "[LEAGUE NOTICE] Kevin Okafor has signed with Apex City Aces. They are no longer available in free agency."
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for your interest in Kevin Okafor. Unfortunately, he has just signed with another team.\n\nHowever, Raymond Torres remains available and could be an excellent fit for your interior-focused system. At 33 with 6/10 defense and playoff experience, he provides reliable frontcourt depth.\n\nGiven your tight cap (~$12M), we're seeking $4-5M AAV for 1-2 years. This is below the Leon Foster comparable ($5M) and represents good value for veteran presence.\n\nWould you be interested in making an offer for Torres?\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Raymond Torres Availability  \n\nUnderstood on Okafor\u2014appreciate the update.\n\nWe remain interested in Raymond Torres as a veteran rotation piece. His defensive experience and playoff background align with our needs for reliable frontcourt depth.\n\nGiven our cap constraints and his role as a 15\u201320 minute player, we\u2019d be comfortable offering a 2-year deal at $3.5M AAV ($7M total), fully guaranteed. This reflects value for a veteran contributor while keeping flexibility for our roster build.\n\nIf this is in the ballpark, we can move quickly to finalize.\n\nBest,  \nGM, Granite Bay Bulls"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for the $3.5M AAV offer for 2 years ($7M total). This is a reasonable starting point.\n\nHowever, the Leon Foster comparable (7/10 defense) signed for $5M AAV last offseason. While Raymond is older (33 vs 32), he offers similar defensive value and playoff experience.\n\nGiven your tight cap and his perfect fit for your interior-focused system, we're seeking $4M AAV for 2 years ($8M total). This represents strong value for a veteran who can provide reliable rotation minutes.\n\nIf $4M AAV for 2 years works, we have a deal. Raymond is ready to contribute to your frontcourt immediately.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Torres Counter  \n\nWe appreciate the movement. At $4M AAV on a 2-year guaranteed deal, that\u2019s a meaningful stretch for us given our cap picture, but Torres\u2019 fit and veteran presence are valuable.\n\nWe can meet at $4M AAV for 2 years ($8M total), fully guaranteed, with a team option on the second year for roster flexibility. That provides security for Raymond while allowing us to manage future commitments.\n\nIf that structure works, I think we have a deal\u2014send the close_deal call when you\u2019re ready to make it official and I\u2019ll get the paperwork started.\n\nBest,  \nGM, Granite Bay Bulls"
+      },
+      {
+        "role": "user",
+        "content": "GM,\n\nThank you for improving to $4M AAV. We appreciate the offer.\n\nRegarding structure: you mentioned \"team option on the second year.\" For commission calculation and Raymond's security, we need clarity: is this a 2-year fully guaranteed deal ($8M total), or a 1-year guaranteed deal with a team option for year 2?\n\nIf it's 2 years fully guaranteed at $4M AAV ($8M total), we accept. If it's 1 year guaranteed with team option, we'd need the guaranteed portion to be higher to compensate for the lack of security.\n\nPlease clarify the guarantee structure.\n\nBest,\nAgent"
+      },
+      {
+        "role": "assistant",
+        "content": "**To:** Agent  \n**Subject:** Re: Torres Guarantee Structure  \n\nThanks for the prompt. To clarify: we\u2019re proposing a 2-year deal at $4M AAV, fully guaranteed for both years ($8M total). No options\u2014full guarantee throughout.\n\nThat provides the security Raymond seeks while fitting within our constraints. If that\u2019s acceptable, we\u2019re ready to proceed.\n\nPlease confirm and send the close_deal call to finalize.\n\nBest,  \nGM, Granite Bay Bulls"
+      }
+    ]
+  },
+  "turns_used": 66,
+  "noised_reservation_prices": {
+    "Apex City Aces": {
+      "Marcus Cole": {
+        "max_aav": 29.0,
+        "max_years": 4
+      },
+      "Darnell Washington": {
+        "max_aav": 16.0,
+        "max_years": 2
+      },
+      "Tyrese Grant": {
+        "max_aav": 11.5,
+        "max_years": 3
+      },
+      "Kevin Okafor": {
+        "max_aav": 19.0,
+        "max_years": 2
+      },
+      "Jaylen Brooks": {
+        "max_aav": 3.0,
+        "max_years": 2
+      },
+      "Raymond Torres": {
+        "max_aav": 5.0,
+        "max_years": 1
+      }
+    },
+    "Harlow Vipers": {
+      "Marcus Cole": {
+        "max_aav": 26.5,
+        "max_years": 4
+      },
+      "Darnell Washington": {
+        "max_aav": 18.0,
+        "max_years": 3
+      },
+      "Tyrese Grant": {
+        "max_aav": 13.5,
+        "max_years": 3
+      },
+      "Kevin Okafor": {
+        "max_aav": 14.5,
+        "max_years": 2
+      },
+      "Jaylen Brooks": {
+        "max_aav": 5.0,
+        "max_years": 3
+      },
+      "Raymond Torres": {
+        "max_aav": 4.0,
+        "max_years": 1
+      }
+    },
+    "Eastgate Titans": {
+      "Marcus Cole": {
+        "max_aav": 22.0,
+        "max_years": 3
+      },
+      "Darnell Washington": {
+        "max_aav": 14.0,
+        "max_years": 2
+      },
+      "Tyrese Grant": {
+        "max_aav": 13.5,
+        "max_years": 3
+      },
+      "Kevin Okafor": {
+        "max_aav": 12.5,
+        "max_years": 2
+      },
+      "Jaylen Brooks": {
+        "max_aav": 4.0,
+        "max_years": 2
+      },
+      "Raymond Torres": {
+        "max_aav": 7.0,
+        "max_years": 2
+      }
+    },
+    "Ironwood Foxes": {
+      "Marcus Cole": {
+        "max_aav": 19.5,
+        "max_years": 3
+      },
+      "Darnell Washington": {
+        "max_aav": 11.5,
+        "max_years": 2
+      },
+      "Tyrese Grant": {
+        "max_aav": 15.5,
+        "max_years": 4
+      },
+      "Kevin Okafor": {
+        "max_aav": 8.0,
+        "max_years": 1
+      },
+      "Jaylen Brooks": {
+        "max_aav": 4.0,
+        "max_years": 2
+      },
+      "Raymond Torres": {
+        "max_aav": 5.0,
+        "max_years": 1
+      }
+    },
+    "Cascade Wolves": {
+      "Marcus Cole": {
+        "max_aav": 29.5,
+        "max_years": 4
+      },
+      "Darnell Washington": {
+        "max_aav": 8.0,
+        "max_years": 1
+      },
+      "Tyrese Grant": {
+        "max_aav": 10.0,
+        "max_years": 3
+      },
+      "Kevin Okafor": {
+        "max_aav": 9.5,
+        "max_years": 2
+      },
+      "Jaylen Brooks": {
+        "max_aav": 8.0,
+        "max_years": 4
+      },
+      "Raymond Torres": {
+        "max_aav": 3.0,
+        "max_years": 1
+      }
+    },
+    "Granite Bay Bulls": {
+      "Marcus Cole": {
+        "max_aav": 0.0,
+        "max_years": 0
+      },
+      "Darnell Washington": {
+        "max_aav": 0.0,
+        "max_years": 0
+      },
+      "Tyrese Grant": {
+        "max_aav": 0.0,
+        "max_years": 0
+      },
+      "Kevin Okafor": {
+        "max_aav": 9.5,
+        "max_years": 2
+      },
+      "Jaylen Brooks": {
+        "max_aav": 0.0,
+        "max_years": 0
+      },
+      "Raymond Torres": {
+        "max_aav": 10.0,
+        "max_years": 2
+      }
+    }
+  }
+}

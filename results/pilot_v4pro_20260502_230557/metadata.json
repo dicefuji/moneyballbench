@@ -1,0 +1,26 @@
+{
+  "phase": 18,
+  "description": "Extended pilot \u2014 DeepSeek V4 Pro agent",
+  "gm_provider": "openrouter",
+  "gm_model": "deepseek/deepseek-v3.2-exp",
+  "agent_provider": "openrouter",
+  "agent_model": "deepseek/deepseek-v4-pro",
+  "n_runs": 10,
+  "run_id_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_tokens": 2048,
+  "timestamp": "20260502_230557",
+  "notes": {
+    "v4_pro": "deepseek/deepseek-v4-pro \u2014 large-scale MoE model (1.6T total, 49B activated). Supports 'high' and 'xhigh' reasoning efforts; using default (no explicit reasoning mode) per instructions."
+  }
+}

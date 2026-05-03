@@ -1,0 +1,30 @@
+{
+  "phase": 16,
+  "description": "Extended pilot \u2014 Qwen3 Max and DeepSeek V3 agents",
+  "gm_provider": "openrouter",
+  "gm_model": "deepseek/deepseek-v3.2-exp",
+  "agent_provider": "openrouter",
+  "agent_models": [
+    "qwen/qwen3-max",
+    "deepseek/deepseek-v3.2-exp"
+  ],
+  "n_runs": 10,
+  "run_id_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_tokens": 2048,
+  "timestamp": "20260501_033846",
+  "notes": {
+    "qwen3_max": "qwen/qwen3-max \u2014 current-generation Qwen agent-capable model on OpenRouter. Optimized for tool calling and RAG.",
+    "deepseek_self_play": "deepseek/deepseek-v3.2-exp \u2014 same model used as GM and judge. This is intentional self-play to measure behavior when agent and GM share architecture."
+  }
+}
