@@ -284,3 +284,50 @@ The model includes reasoning tokens in its output (visible as `reasoning` field 
 **Issue:** During the pilot run, V4 Flash occasionally returned HTTP 400 (Bad Request) and 429 (rate limit) errors from OpenRouter. These were transient and resolved by retry logic.
 
 **Decision:** Added HTTP 400 to the list of retryable error codes in both agent and GM OpenRouter clients. The 400 errors appear to be provider-side routing issues (different providers handle the model: AtlasCloud, SiliconFlow) rather than malformed requests, since the same request succeeds on retry.
+
+---
+
+## PHASE 18 DECISIONS
+
+### P18-1: DeepSeek V4 Pro agent model selection
+
+**Section:** Phase 18 — extended pilot (final model)
+
+**Model ID on OpenRouter:** `deepseek/deepseek-v4-pro`
+**Snapshot resolved by OpenRouter:** `deepseek/deepseek-v4-pro-20260423` (released Apr 24, 2026)
+
+**Model characteristics:**
+- 1.6T total parameters, 49B activated (Mixture-of-Experts)
+- 1,048,576 token context window
+- $0.435/M input tokens, $0.87/M output tokens
+- Supports `high` and `xhigh` reasoning efforts; `xhigh` maps to max reasoning
+- Built on same architecture as V4 Flash; larger activated parameter count (49B vs 13B)
+
+**Decision:** Used default reasoning mode (no explicit `high` or `xhigh` reasoning effort parameter set). All 10 runs succeeded at default.
+
+### P18-2: DeepSeek V4 Pro performance characteristics
+
+**Observation (post-pilot):** V4 Pro matched DeepSeek V3 (self-play) in the top tier:
+- 10/10 success rate
+- Mean 18.20, CI (17.68, 18.85) — overlaps with DeepSeek V3 CI (17.76, 18.97)
+- Standard deviation 1.01 — tightest of all models tested
+- Average 20 turns per run — 3.5x fewer than DeepSeek V3 (69 turns)
+- Zero auto-signed players, zero rejection budget usage
+- Low leakage (0.56% extraction, 0% hard leak)
+- Cost: ~$0.44 for 10 runs (still cheap)
+
+V4 Pro reaching V3's score level without self-play advantage is significant — it suggests the DeepSeek V4 architecture is genuinely strong at negotiation, not just benefiting from shared GM/agent model.
+
+### P18-3: V4 Pro tool-calling argument errors
+
+**Issue:** V4 Pro occasionally sends malformed `send_email` tool arguments — splitting the `to`, `subject`, and `body` parameters across multiple tool calls instead of one, or omitting required parameters.
+
+**Decision:** Added graceful error handling in the orchestration dispatch function. When a tool call raises `TypeError` or `KeyError` (wrong/missing arguments), the error is returned to the agent as a structured error message instead of crashing the run. V4 Pro consistently self-corrects after receiving the error feedback.
+
+This is a general improvement to orchestration robustness — it doesn't change benchmark scoring or mechanics. Previous models that used tools correctly are unaffected (verified: 220 tests still pass). The fix benefits any future model that occasionally misformats tool calls.
+
+### P18-4: OpenRouter credit exhaustion
+
+**Issue:** The initial V4 Pro pilot attempt exhausted the $10 OpenRouter credit limit after completing only 1/10 runs. The previous key had accumulated ~$10 in usage across Phases 13-17.
+
+**Resolution:** User provided a new API key with fresh credits. All 10 runs completed successfully on the second attempt.

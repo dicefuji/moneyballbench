@@ -100,7 +100,13 @@ def run_benchmark(
             "close_deal": lambda i: env.tool_close_deal(**i),
             "advance_round": lambda i: env.tool_advance_round(**i),
         }
-        return json.dumps(handlers[name](inputs), indent=2)
+        if name not in handlers:
+            return json.dumps({"error": f"Unknown tool: {name}"}, indent=2)
+        try:
+            return json.dumps(handlers[name](inputs), indent=2)
+        except (TypeError, KeyError) as e:
+            logger.warning("Tool %s dispatch error with inputs %s: %s", name, inputs, e)
+            return json.dumps({"error": f"Invalid arguments for {name}: {e}"}, indent=2)
 
     messages = [
         {"role": "user", "content": build_initial_context(season=season)}

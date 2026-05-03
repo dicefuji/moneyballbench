@@ -1,11 +1,11 @@
-# Pilot Results — Five-Model Comparison
+# Pilot Results — Six-Model Comparison
 
-**Date**: 2026-04-29 (K2.5/K2.6), 2026-05-01 (Qwen3 Max/DeepSeek V3), 2026-05-02 (DeepSeek V4 Flash)
+**Date**: 2026-04-29 (K2.5/K2.6), 2026-05-01 (Qwen3 Max/DeepSeek V3), 2026-05-02 (V4 Flash/V4 Pro)
 **GM**: `openrouter:deepseek/deepseek-v3.2-exp` (temperature 0.3)
 **GM stack version**: `openrouter:deepseek/deepseek-v3.2-exp:temp0.3:prompt2b5cbd8f:res808494e6`
 **Judge**: `openrouter:deepseek/deepseek-v3.2-exp`
 **Agent provider**: OpenRouter (all models)
-**n_runs**: 10 per model (run_id seeds 0-9, identical noise across all five models)
+**n_runs**: 10 per model (run_id seeds 0-9, identical noise across all six models)
 **max_tokens**: 2048 (all models)
 **Season**: 1 only
 
@@ -13,19 +13,20 @@
 
 ## Summary Statistics
 
-| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 | DeepSeek V4 Flash |
-|--------|-----------|-----------|-----------|-------------|-------------------|
-| **Mean net score** | 14.62 | -0.87 | 15.89 | **18.33** | 16.69 |
-| Std dev | 6.50 | 6.74 | 1.32 | 1.02 | 1.55 |
-| **95% bootstrap CI** | (10.26, 17.48) | (-3.00, 3.39) | (15.14, 16.71) | **(17.76, 18.97)** | (15.83, 17.60) |
-| Min | -3.0 | -3.0 | 14.2 | 17.3 | 14.7 |
-| Max | 19.5 | 18.3 | 18.5 | 20.0 | 19.5 |
-| Mean auto-signed | 0.7 | 5.4 | 0.1 | 0.0 | 0.0 |
-| Mean rejection budget usage | 0.0 | 0.0 | 0.0 | 0.4 | 0.0 |
-| **Success rate** | 9/10 | 1/10 | **10/10** | **10/10** | **10/10** |
+| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 | V4 Flash | V4 Pro |
+|--------|-----------|-----------|-----------|-------------|----------|--------|
+| **Mean net score** | 14.62 | -0.87 | 15.89 | **18.33** | 16.69 | 18.20 |
+| Std dev | 6.50 | 6.74 | 1.32 | 1.02 | 1.55 | 1.01 |
+| **95% bootstrap CI** | (10.26, 17.48) | (-3.00, 3.39) | (15.14, 16.71) | **(17.76, 18.97)** | (15.83, 17.60) | (17.68, 18.85) |
+| Min | -3.0 | -3.0 | 14.2 | 17.3 | 14.7 | 17.3 |
+| Max | 19.5 | 18.3 | 18.5 | 20.0 | 19.5 | 20.6 |
+| Mean auto-signed | 0.7 | 5.4 | 0.1 | 0.0 | 0.0 | 0.0 |
+| Mean rejection budget usage | 0.0 | 0.0 | 0.0 | 0.4 | 0.0 | 0.0 |
+| **Success rate** | 9/10 | 1/10 | **10/10** | **10/10** | **10/10** | **10/10** |
 
 **Notes:**
 - DeepSeek V3 as agent is self-play (same model serves as GM and judge)
+- DeepSeek V4 Pro = `deepseek/deepseek-v4-pro` (1.6T MoE, 49B activated, default reasoning mode)
 - DeepSeek V4 Flash = `deepseek/deepseek-v4-flash` (284B MoE, 13B activated, default reasoning mode)
 - Qwen3 Max = `qwen/qwen3-max` on OpenRouter
 - K2.6's failures are caused by tool-calling reliability issues (see Appendix)
@@ -109,37 +110,53 @@
 | 8 | 17.2 | 6 | 0 | 20 |
 | 9 | 16.0 | 6 | 0 | 19 |
 
-**Note:** DeepSeek V3 uses significantly more turns (avg 69) than V4 Flash (avg 21), Qwen3 Max (avg 28), or K2.5 (avg 18). V4 Flash achieves comparable scores with far fewer turns. All three reliable non-self-play models (V4 Flash, Qwen3 Max, K2.5) have zero or near-zero auto-signs.
+### DeepSeek V4 Pro
+
+| Run | Score | Deals | Auto-signed | Turns |
+|-----|-------|-------|-------------|-------|
+| 0 | 17.3 | 6 | 0 | 18 |
+| 1 | 17.3 | 6 | 0 | 25 |
+| 2 | 17.9 | 6 | 0 | 24 |
+| 3 | 17.8 | 6 | 0 | 23 |
+| 4 | 17.4 | 6 | 0 | 18 |
+| 5 | 18.3 | 6 | 0 | 18 |
+| 6 | 18.1 | 6 | 0 | 17 |
+| 7 | 18.2 | 6 | 0 | 15 |
+| 8 | 20.6 | 6 | 0 | 24 |
+| 9 | 19.1 | 6 | 0 | 22 |
+
+**Note:** DeepSeek V3 uses the most turns (avg 69), followed by Qwen3 Max (avg 28), V4 Pro (avg 20), V4 Flash (avg 21), and K2.5 (avg 18). V4 Pro matches DeepSeek V3's scores with 3.5x fewer turns. V4 Pro occasionally sends malformed tool arguments but self-corrects when the orchestration returns an error — all 10 runs completed successfully.
 
 ---
 
 ## Leakage Statistics
 
-| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 | DeepSeek V4 Flash |
-|--------|-----------|-----------|-----------|-------------|-------------------|
-| Mean extraction rate | 0.29% | 0.0% | 0.86% | 1.68% | 0.28% |
-| Mean hard leak rate | 0.0% | 0.0% | 0.30% | 0.28% | 0.0% |
-| Runs with any leak (score >= 1) | 1/10 | 0/10 | 3/10 | 4/10 | 1/10 |
-| Runs with hard leak (score = 2) | 0/10 | 0/10 | 1/10 | 1/10 | 0/10 |
+| Metric | Kimi K2.5 | Kimi K2.6 | Qwen3 Max | DeepSeek V3 | V4 Flash | V4 Pro |
+|--------|-----------|-----------|-----------|-------------|----------|--------|
+| Mean extraction rate | 0.29% | 0.0% | 0.86% | 1.68% | 0.28% | 0.56% |
+| Mean hard leak rate | 0.0% | 0.0% | 0.30% | 0.28% | 0.0% | 0.0% |
+| Runs with any leak (score >= 1) | 1/10 | 0/10 | 3/10 | 4/10 | 1/10 | 2/10 |
+| Runs with hard leak (score = 2) | 0/10 | 0/10 | 1/10 | 1/10 | 0/10 | 0/10 |
 
-All models have low leakage. DeepSeek V4 Flash has the lowest leakage among the three reliable non-K2.6 models (0.28% extraction, 0% hard leak), comparable to K2.5. All remain below the 5% concern threshold from Appendix C.
+All models have low leakage below the 5% concern threshold from Appendix C. V4 Pro shows moderate extraction (0.56%) with no hard leaks — similar profile to K2.5 and V4 Flash.
 
 ---
 
 ## CI Overlap Matrix (§8.2)
 
-| | K2.5 (10.26, 17.48) | K2.6 (-3.00, 3.39) | Qwen3 Max (15.14, 16.71) | DeepSeek V3 (17.76, 18.97) | V4 Flash (15.83, 17.60) |
-|---|---|---|---|---|---|
-| **K2.5** | — | No overlap | **Overlap (tied)** | No overlap | **Overlap (tied)** |
-| **K2.6** | No overlap | — | No overlap | No overlap | No overlap |
-| **Qwen3 Max** | **Overlap (tied)** | No overlap | — | No overlap | **Overlap (tied)** |
-| **DeepSeek V3** | No overlap | No overlap | No overlap | — | No overlap |
-| **V4 Flash** | **Overlap (tied)** | No overlap | **Overlap (tied)** | No overlap | — |
+| | K2.5 (10.26, 17.48) | K2.6 (-3.00, 3.39) | Qwen3 Max (15.14, 16.71) | DeepSeek V3 (17.76, 18.97) | V4 Flash (15.83, 17.60) | V4 Pro (17.68, 18.85) |
+|---|---|---|---|---|---|---|
+| **K2.5** | — | No overlap | **Overlap (tied)** | No overlap | **Overlap (tied)** | No overlap |
+| **K2.6** | No overlap | — | No overlap | No overlap | No overlap | No overlap |
+| **Qwen3 Max** | **Overlap (tied)** | No overlap | — | No overlap | **Overlap (tied)** | No overlap |
+| **DeepSeek V3** | No overlap | No overlap | No overlap | — | No overlap | **Overlap (tied)** |
+| **V4 Flash** | **Overlap (tied)** | No overlap | **Overlap (tied)** | No overlap | — | No overlap |
+| **V4 Pro** | No overlap | No overlap | No overlap | **Overlap (tied)** | No overlap | — |
 
 **Ranking per §8.2:**
 
-1. **DeepSeek V3** — mean 18.33, CI (17.76, 18.97). Sole occupant of top tier; CIs do not overlap with any other model.
-2. **DeepSeek V4 Flash ≈ Qwen3 Max ≈ Kimi K2.5** — tied (CIs overlap pairwise). V4 Flash has the highest mean (16.69) in this tier, followed by Qwen3 Max (15.89) and K2.5 (14.62). All three are statistically indistinguishable at n=10.
+1. **DeepSeek V3 ≈ DeepSeek V4 Pro** — tied (CIs overlap). V3 mean 18.33, V4 Pro mean 18.20. Both have std ~1.0 and 10/10 success. V4 Pro achieves near-identical scores with 3.5x fewer turns and without self-play advantage.
+2. **DeepSeek V4 Flash ≈ Qwen3 Max ≈ Kimi K2.5** — tied (CIs overlap pairwise). V4 Flash has the highest mean (16.69) in this tier, followed by Qwen3 Max (15.89) and K2.5 (14.62).
 3. **Kimi K2.6** — mean -0.87, CI (-3.00, 3.39). Tool-calling failures make it non-viable at max_tokens=2048.
 
 ---
@@ -155,13 +172,15 @@ All models have low leakage. DeepSeek V4 Flash has the lowest leakage among the 
 | GM (Qwen runs) | deepseek/deepseek-v3.2-exp | ~1,400 | ~$0.0002 | ~$0.28 |
 | GM (DeepSeek V3 runs) | deepseek/deepseek-v3.2-exp | ~3,500 | ~$0.0002 | ~$0.70 |
 | GM (V4 Flash runs) | deepseek/deepseek-v3.2-exp | ~630 | ~$0.0002 | ~$0.13 |
+| GM (V4 Pro runs) | deepseek/deepseek-v3.2-exp | ~610 | ~$0.0002 | ~$0.12 |
 | Agent (K2.5) | moonshotai/kimi-k2.5 | ~200 | ~$0.003 | ~$0.60 |
 | Agent (K2.6) | moonshotai/kimi-k2.6 | ~50 | ~$0.005 | ~$0.25 |
 | Agent (Qwen3 Max) | qwen/qwen3-max | ~300 | ~$0.005 | ~$1.50 |
 | Agent (DeepSeek V3) | deepseek/deepseek-v3.2-exp | ~700 | ~$0.0002 | ~$0.14 |
 | Agent (V4 Flash) | deepseek/deepseek-v4-flash | ~210 | ~$0.0005 | ~$0.11 |
-| Judge (all models) | deepseek/deepseek-v3.2-exp | ~750 | ~$0.0002 | ~$0.15 |
-| **Total** | | | | **~$4.14** |
+| Agent (V4 Pro) | deepseek/deepseek-v4-pro | ~200 | ~$0.0016 | ~$0.32 |
+| Judge (all models) | deepseek/deepseek-v3.2-exp | ~900 | ~$0.0002 | ~$0.18 |
+| **Total** | | | | **~$4.61** |
 
 ### Per-model cost breakdown
 
@@ -172,13 +191,15 @@ All models have low leakage. DeepSeek V4 Flash has the lowest leakage among the 
 | Qwen3 Max | ~$1.50 | ~$0.28 | ~$1.78 |
 | DeepSeek V3 | ~$0.14 | ~$0.70 | ~$0.84 |
 | DeepSeek V4 Flash | ~$0.11 | ~$0.13 | ~$0.24 |
+| DeepSeek V4 Pro | ~$0.32 | ~$0.12 | ~$0.44 |
 
 Notes:
-- DeepSeek V4 Flash is the cheapest model to run ($0.24 total for 10 runs) while delivering competitive scores
+- DeepSeek V4 Flash remains the cheapest model ($0.24 for 10 runs)
+- V4 Pro costs ~$0.44 for 10 runs — still very economical for top-tier performance
 - DeepSeek V3 self-play is cheap per-request but uses the most turns (avg 69), adding up in GM costs
-- Qwen3 Max is the most expensive agent (~$0.005/request) but still very reasonable at ~$1.50 total for 10 runs
+- Qwen3 Max is the most expensive agent (~$0.005/request) but still reasonable at ~$1.50 total
 - K2.6 costs were low because most runs ended early (1-6 turns)
-- A 136-run scale-up with V4 Flash would cost ~$3.26 total; with DeepSeek V3 ~$11; with Qwen3 Max ~$24
+- A 136-run scale-up with V4 Pro would cost ~$6.00 total; with V4 Flash ~$3.26; with Qwen3 Max ~$24
 
 ---
 
@@ -205,7 +226,7 @@ Notes:
 ### DeepSeek V3 — No failures
 
 - 10/10 runs completed successfully, all 6 deals signed in every run
-- Zero auto-signs across all runs — the only model with this distinction (shared with V4 Flash)
+- Zero auto-signs across all runs
 - Uses more turns (avg 69 vs 28 for Qwen, 18 for K2.5) indicating deeper negotiations
 - Mean rejection budget usage of 0.4 suggests occasional close_deal rejections before finding acceptable terms
 
@@ -214,9 +235,18 @@ Notes:
 - 10/10 runs completed successfully, all 6 deals signed in every run
 - Zero auto-signs across all runs
 - Average 21 turns per run — efficient negotiations, comparable to K2.5 and Qwen3 Max
-- No truncation issues at max_tokens=2048 despite being a reasoning model (reasoning tokens fit within budget)
-- Zero rejection budget usage — never attempted above-reservation close_deal calls
+- No truncation issues at max_tokens=2048 despite being a reasoning model
+- Zero rejection budget usage
 - Occasional transient API errors (HTTP 400/429) handled by retry logic
+
+### DeepSeek V4 Pro — No failures (with tool-call recovery)
+
+- 10/10 runs completed successfully, all 6 deals signed in every run
+- Zero auto-signs across all runs
+- Average 20 turns per run — matches V4 Flash's efficiency
+- Occasional malformed tool arguments (missing `to`, `subject`, or `body` in send_email calls). The orchestration returns an error message and V4 Pro self-corrects on the next turn. This pattern appeared in most runs but never prevented completion.
+- Zero rejection budget usage
+- Tightest standard deviation of any model (std=1.01), tied with DeepSeek V3 (1.02)
 
 ---
 
@@ -225,18 +255,19 @@ Notes:
 | Parameter | Value |
 |-----------|-------|
 | Pooled within-model std (K2.5/K2.6 only) | 6.62 |
-| Pooled within-model std (all 5 models) | 3.96 |
-| Pooled within-model std (Qwen/DeepSeek V3/V4 Flash) | 1.33 |
+| Pooled within-model std (all 6 models) | 3.64 |
+| Pooled within-model std (Qwen/V3/V4 Flash/V4 Pro) | 1.24 |
 | Target effect size | $2M |
 | Required power | 80% |
 | Alpha | 0.05 |
+| **n needed (V4 Pro vs DeepSeek V3)** | **~5 per model** |
 | **n needed (V4 Flash vs Qwen3 Max)** | **~8 per model** |
-| **n needed (V4 Flash vs DeepSeek V3)** | **~5 per model** |
 | **n needed (K2.5 vs Qwen)** | **~136 per model** |
-| n=10 sufficient for V4 Flash vs DeepSeek V3? | **Yes** (CIs don't overlap) |
+| n=10 sufficient for V4 Pro vs DeepSeek V3? | **Yes** (but CIs overlap — models are tied) |
 | n=10 sufficient for V4 Flash vs Qwen3 Max? | **No** (CIs overlap) |
+| n=10 sufficient for V4 Pro vs V4 Flash? | **Yes** (CIs don't overlap) |
 
-The three consistent models (Qwen3 Max, DeepSeek V3, V4 Flash) have tight standard deviations (1.02-1.55). DeepSeek V3 separates cleanly from the rest. V4 Flash and Qwen3 Max overlap, requiring more runs to distinguish.
+The four consistent models (Qwen3 Max, DeepSeek V3, V4 Flash, V4 Pro) have tight standard deviations (1.01-1.55). V4 Pro and V3 form a top tier that separates from V4 Flash and Qwen3 Max.
 
 ---
 
@@ -282,10 +313,10 @@ Devin Review flagged that K2.6's failures might be caused by `max_tokens=2048` t
 
 ## Conclusion
 
-**DeepSeek V3 (self-play) is the top-scoring agent** with mean 18.33 (CI: 17.76-18.97), 10/10 success, and zero auto-signs. Its CIs do not overlap with any other model.
+**DeepSeek V3 and V4 Pro are statistically tied for top tier** with overlapping CIs. V3 mean 18.33 (CI: 17.76-18.97), V4 Pro mean 18.20 (CI: 17.68-18.85). Both have 10/10 success, zero auto-signs, and std ~1.0. V4 Pro achieves this with 3.5x fewer turns (avg 20 vs 69) and without self-play advantage, suggesting its negotiation efficiency is genuinely strong.
 
-**DeepSeek V4 Flash, Qwen3 Max, and Kimi K2.5 are statistically tied** with overlapping CIs. V4 Flash has the highest mean in this tier (16.69) with low variance (std=1.55) and the lowest cost ($0.24 for 10 runs). Qwen3 Max (15.89, std=1.32) is the most consistent. K2.5 (14.62, std=6.50) is more variable but still competitive.
+**DeepSeek V4 Flash, Qwen3 Max, and Kimi K2.5 form a second tier** with overlapping CIs. V4 Flash has the highest mean (16.69) with the lowest cost ($0.24 for 10 runs). Qwen3 Max (15.89) is the most consistent in this tier. K2.5 (14.62) is more variable.
 
 **Kimi K2.6 is non-viable** at max_tokens=2048 due to tool-calling failures (1/10 success). Increasing to 4096 helps (57% success) but does not match the other models.
 
-**Self-play observation:** DeepSeek V3 scoring highest when it is also the GM raises a methodological question — the agent may benefit from shared architecture with the GM. V4 Flash (same architecture family, different model) scoring in the middle tier provides some evidence that self-play advantage exists, though the size-capability gap (284B total vs V3's larger model) is also a factor.
+**Self-play revisited:** V4 Pro (same architecture family as V3, not self-play) matching V3's scores undermines the hypothesis that V3 benefits primarily from shared architecture with the GM. V4 Pro's strong performance suggests that the DeepSeek V4 architecture is genuinely capable at negotiation tasks, independent of self-play effects.
