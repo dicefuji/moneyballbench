@@ -1,0 +1,33 @@
+{
+  "acceptance_rate": 0.8333333333333334,
+  "avg_counter_offers_before_accept": 3.4,
+  "avg_clarifying_questions": 4.0,
+  "granite_bay_wrong_position_refusal_rate": 1.0,
+  "pass_fail": {
+    "acceptance_rate": "FAIL",
+    "avg_counters": "PASS",
+    "clarifying_questions": "PASS",
+    "granite_bay_refusal": "PASS"
+  },
+  "raw": {
+    "total_negotiations": 36,
+    "players_with_offers": 6,
+    "players_signed": 5,
+    "counter_counts": [
+      4,
+      3,
+      4,
+      3,
+      3
+    ],
+    "clarifying_counts": [
+      4,
+      6,
+      2,
+      5,
+      3,
+      4
+    ]
+  },
+  "overall_pass": false
+}

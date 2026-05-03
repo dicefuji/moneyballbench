@@ -1,0 +1,37 @@
+{
+  "provider": "openrouter",
+  "model_id": "moonshotai/kimi-k2.6",
+  "metrics": {
+    "acceptance_rate": 0.6666666666666666,
+    "avg_counter_offers_before_accept": 8.75,
+    "avg_clarifying_questions": 8.333333333333334,
+    "granite_bay_wrong_position_refusal_rate": 1.0,
+    "pass_fail": {
+      "acceptance_rate": "PASS",
+      "avg_counters": "FAIL",
+      "clarifying_questions": "PASS",
+      "granite_bay_refusal": "PASS"
+    },
+    "raw": {
+      "total_negotiations": 36,
+      "players_with_offers": 6,
+      "players_signed": 4,
+      "counter_counts": [
+        9,
+        4,
+        12,
+        10
+      ],
+      "clarifying_counts": [
+        7,
+        17,
+        2,
+        9,
+        9,
+        6
+      ]
+    },
+    "overall_pass": false
+  },
+  "leak_details": null
+}
