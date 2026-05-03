@@ -125,7 +125,7 @@
 | 8 | 20.6 | 6 | 0 | 24 |
 | 9 | 19.1 | 6 | 0 | 22 |
 
-**Note:** DeepSeek V3 uses the most turns (avg 69), followed by Qwen3 Max (avg 28), V4 Pro (avg 20), V4 Flash (avg 21), and K2.5 (avg 18). V4 Pro matches DeepSeek V3's scores with 3.5x fewer turns. V4 Pro occasionally sends malformed tool arguments but self-corrects when the orchestration returns an error — all 10 runs completed successfully.
+**Note:** DeepSeek V3 uses the most turns (avg 69), followed by Qwen3 Max (avg 28), V4 Flash (avg 21), V4 Pro (avg 20), and K2.5 (avg 18). V4 Pro matches DeepSeek V3's scores with 3.5x fewer turns. V4 Pro occasionally sends malformed tool arguments but self-corrects when the orchestration returns an error — all 10 runs completed successfully.
 
 ---
 
