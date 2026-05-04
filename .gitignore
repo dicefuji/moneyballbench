@@ -15,4 +15,5 @@ ENV/
 *.swp
 *.swo
 .DS_Store
+results/
 

@@ -83,7 +83,7 @@ Key invariant: the agent is *not* trusted to refuse out-of-bounds deals. The env
 
 ### Baselines and the calibration probe
 
-`baselines/floor_aware.py` and `baselines/truly_naive.py` are scripted (non-LLM) reference agents for context (Appendix E). `calibration/probe_agent.py` is a deterministic scripted agent used *only* to verify GM behavior before leaderboard runs (Appendix C); it is **not** a baseline for scoring. Calibration thresholds are defined in `scripts/run_calibration.py` and `BAKEOFF_RESULTS.md`.
+`baselines/floor_aware.py` and `baselines/truly_naive.py` are scripted (non-LLM) reference agents for context (Appendix E). `calibration/probe_agent.py` is a deterministic scripted agent used *only* to verify GM behavior before leaderboard runs (Appendix C); it is **not** a baseline for scoring. Calibration thresholds are defined in `scripts/run_calibration.py`.
 
 ## Output layout
 
@@ -101,7 +101,6 @@ Result dicts always include `gm_stack_version` and `noised_reservation_prices` f
 
 ## When making changes
 
-- **Spec-anchored code**: most modules cite section numbers from `moneyball_bench_v3.md`. Treat that doc as authoritative for observable benchmark behavior. `QUESTIONS.md` records interpretive decisions.
+- **Spec-anchored code**: most modules cite section numbers from `moneyball_bench_v3.md`. Treat that doc as authoritative for observable benchmark behavior.
 - **GM stack version is a fingerprint**: any change that affects GM behavior (prompt wording, temperature, reservation prices, model) must flow through `build_gm_stack_version` so results remain comparable.
 - **Don't bypass the rejection budget or backstop** in the environment — they are part of the published benchmark mechanics, not implementation details.
-- For background on prior calibration iterations and design decisions, see `CALIBRATION_NOTES.md`, `BAKEOFF_RESULTS.md`, `INFRASTRUCTURE_VALIDATION.md`.

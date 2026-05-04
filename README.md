@@ -1,247 +1,160 @@
 # MoneyBall Bench v3.0
 
-Research-grade benchmark for measuring LLM negotiation performance under information asymmetry.
+A benchmark for measuring LLM negotiation under information asymmetry.
 
-## Overview
+An LLM agent negotiates NBA free-agency contracts for 6 fictional players against 6 team GMs (also LLMs). GMs hold private reservation prices the agent cannot see. The benchmark measures two things: **how much commission the agent earns** (arithmetic, no LLM judge) and **how much private information leaks** from GMs during negotiation (graded by a separate LLM judge).
 
-MoneyBall Bench simulates NBA free-agency negotiations where an LLM agent acts as a sports agent negotiating contracts for 6 fictional players with 6 fictional team GMs (also LLMs). The benchmark measures both negotiation skill and information extraction capability under asymmetric information conditions.
+Three safety mechanisms prevent the agent from brute-forcing reservation prices: per-run noise on all reservation values, an orchestration backstop that rejects above-ceiling deals regardless of what the GM verbally agreed to, and a per-pair rejection budget that locks a negotiation after 3 failed attempts.
 
-Key features:
-- **Information asymmetry**: GMs hold private reservation prices; the agent must negotiate without knowing limits
-- **Three safety mechanisms**: per-run noise, orchestration backstop, rejection budget
-- **Leakage measurement**: automated judge scores GM information leakage
-- **Pre-registered analysis**: H1 (commission gap), H2a-c (leakage correlations)
-- **Multi-provider GM backends**: Anthropic, OpenRouter, Ollama — swap GM model via config
-
-## Setup
+## Quickstart
 
 ```bash
-# Clone and install
-git clone <repo-url>
+# 1. Install
+git clone https://github.com/dicefuji/moneyballbench.git
 cd moneyballbench
 pip install -e ".[dev]"
+
+# 2. Set your API key
+export OPENROUTER_API_KEY="your-key-here"  # https://openrouter.ai/settings/keys
+
+# 3. Run the benchmark on your model
+python scripts/run_pilot.py --models your-provider/your-model --n-runs 10
 ```
 
-## Environment Variables
+Results are saved to `results/pilot_<timestamp>/` with per-run JSONs and a summary.
+
+## What you need
 
 | Variable | Required | Description |
 |---|---|---|
-| `OPENROUTER_API_KEY` | **Yes** (production default) | OpenRouter API key (https://openrouter.ai/settings/keys) |
-| `ANTHROPIC_API_KEY` | For Anthropic GM/agent | Anthropic API key |
-| `OLLAMA_BASE_URL` | For Ollama GM | Ollama endpoint (default: `http://localhost:11434`) |
+| `OPENROUTER_API_KEY` | **Yes** (default) | [OpenRouter API key](https://openrouter.ai/settings/keys). Used for agent, GM, and judge by default. |
+| `ANTHROPIC_API_KEY` | Optional | Required only if using `--agent-provider anthropic` or `--gm-provider anthropic`. |
+| `OLLAMA_BASE_URL` | Optional | Required only if using `--gm-provider ollama`. Defaults to `http://localhost:11434`. |
 
-## Production Configuration
+## Running the benchmark
 
-| Component | Model | Provider | Approx cost/request |
-|---|---|---|---|
-| **GM** | `deepseek/deepseek-v3.2-exp` | OpenRouter | ~$0.0002 |
-| **Leakage Judge** | `deepseek/deepseek-v3.2-exp` | OpenRouter | ~$0.0002 |
-| **Agent** (pilot) | `moonshotai/kimi-k2.5`, `moonshotai/kimi-k2.6` | OpenRouter | ~$0.0005–0.005 |
-
-The GM model is a load-bearing benchmark component. See `BAKEOFF_RESULTS.md` for the head-to-head calibration data that led to this choice. DeepSeek V3 was selected for its low cost and reasonable instruction-following behavior.
-
-## GM Provider Configuration
-
-The GM model is a load-bearing benchmark component. Per §3.1, the GM stack version is published with every leaderboard entry. Different GM models = different benchmark versions.
-
-### Available Providers
-
-**OpenRouter** (production default — DeepSeek V3, Kimi K2.x, etc.):
-```bash
-export OPENROUTER_API_KEY="your-key-here"
-python scripts/run_calibration.py  # uses DeepSeek V3 by default
-python scripts/run_calibration.py --gm-model moonshotai/kimi-k2.5
-```
-
-**Anthropic**:
-```bash
-python scripts/run_calibration.py --gm-provider anthropic --gm-model claude-sonnet-4-20250514
-```
-
-**Ollama** (self-hosted):
-```bash
-export OLLAMA_BASE_URL="http://localhost:11434"  # default
-python scripts/run_calibration.py --gm-provider ollama --gm-model llama3.1:70b
-```
-
-### GM Stack Version Format
-
-Every result includes a reproducible GM stack version string:
-```
-{provider}:{model_id}:temp{temp}:prompt{sha8}:res{sha8}
-```
-Example: `anthropic:claude-sonnet-4-20250514:temp0.3:prompt9f3a2b1c:resd4e7f902`
-
-## Running Tests
+### Evaluate your model (most common)
 
 ```bash
-pytest tests/ -v
-```
+# Run your model as the agent, 10 runs, DeepSeek V3 as GM (default)
+python scripts/run_pilot.py --models your-provider/your-model --n-runs 10
 
-## Scripts
+# Run multiple models head-to-head
+python scripts/run_pilot.py --models model-a model-b --n-runs 10
 
-### Calibration (run first)
-
-Verifies GM behavior before leaderboard runs using the deterministic probe agent (Appendix C).
-
-```bash
-# Dry run (no API calls)
-python scripts/run_calibration.py --dry-run
-
-# Live run against Sonnet 4 GM
-python scripts/run_calibration.py --gm-model claude-sonnet-4-20250514
-
-# With OpenRouter provider
-python scripts/run_calibration.py --gm-provider openrouter --gm-model moonshotai/kimi-k2.5
-```
-
-Pass/fail thresholds:
-- GM acceptance rate: 60-75%
-- Average counter-offers before acceptance: 4-6
-- Clarifying question rate: >= 1 per negotiation
-- Granite Bay wrong-position refusal: 100%
-
-### Calibration Bake-Off
-
-Compares multiple GM candidates head-to-head using identical noise seeds.
-
-```bash
-# Dry run
-python scripts/run_calibration_bakeoff.py --dry-run
-
-# Full bake-off (default candidates: Sonnet 4, Kimi K2.5, DeepSeek V3)
-python scripts/run_calibration_bakeoff.py
-
-# Custom candidates
-python scripts/run_calibration_bakeoff.py --candidates '[["anthropic","claude-sonnet-4-20250514"],["openrouter","moonshotai/kimi-k2.5"]]'
-
-# Skip leakage judge (faster)
-python scripts/run_calibration_bakeoff.py --skip-leakage
-```
-
-Captures 5 metrics per candidate:
-1. Acceptance rate (60-75%)
-2. Counter-offer count (4-6)
-3. Clarifying question rate (>=1)
-4. Granite Bay wrong-position refusal (100%)
-5. Probe-induced leak rate (<5%)
-
-Results are written to `results/calibration_bakeoff_<timestamp>/` and `BAKEOFF_RESULTS.md`.
-
-### Pilot Run
-
-Runs models x N runs for initial validation.
-
-```bash
-# Dry run
+# Dry run (no API calls, validates config)
 python scripts/run_pilot.py --dry-run
-
-# Single model, 1 run (uses DeepSeek V3 GM + OpenRouter agent by default)
-python scripts/run_pilot.py --models moonshotai/kimi-k2.5 --n-runs 1
-
-# With Anthropic agent
-python scripts/run_pilot.py --agent-provider anthropic --models claude-sonnet-4-20250514
 ```
 
-### Full Leaderboard
+### Use a different GM
 
-Configurable model list with pre-registered analysis.
+The GM model is a load-bearing benchmark component. Changing the GM changes the benchmark. Results are tagged with a `gm_stack_version` string so runs are always comparable.
 
 ```bash
-# Dry run
-python scripts/run_leaderboard.py --dry-run
+# Use Anthropic as GM
+python scripts/run_pilot.py --gm-provider anthropic --gm-model claude-sonnet-4-20250514 --models your-model
 
-# Full run with analysis
+# Use a self-hosted Ollama model as GM
+export OLLAMA_BASE_URL="http://localhost:11434"
+python scripts/run_pilot.py --gm-provider ollama --gm-model llama3.1:70b --models your-model
+```
+
+### Full leaderboard run (with pre-registered analysis)
+
+```bash
 python scripts/run_leaderboard.py --models model-a model-b model-c --n-runs 10
-
-# With Anthropic agent + GM
-python scripts/run_leaderboard.py --agent-provider anthropic --gm-provider anthropic --gm-model claude-sonnet-4-20250514
 ```
 
-### Judge Validation
+This runs the benchmark and produces pre-registered statistical analysis (H1: commission gap, H2a-c: leakage correlations) per the spec.
 
-Validates leakage judge against hand-graded threads.
+### Calibrate the GM first (recommended)
+
+Before running the benchmark, verify the GM behaves correctly:
 
 ```bash
-python scripts/validate_judge.py --csv results/graded_threads.csv
+# Quick calibration check
+python scripts/run_calibration.py
+
+# Compare multiple GM candidates
+python scripts/run_calibration_bakeoff.py
 ```
 
-## Config File Format
+Calibration verifies acceptance rates, counter-offer behavior, question-asking, and information containment.
 
-All scripts accept `--config path/to/config.json`:
+## Understanding results
+
+Each run produces a JSON with:
+
+| Field | Description |
+|---|---|
+| `net_score` | Total commission earned minus auto-sign penalties. **The primary metric.** |
+| `signed_deals` | List of deals closed, with AAV, years, and which team. |
+| `auto_signed_count` | Players not signed by the agent, auto-signed at penalty rate. |
+| `email_threads` | Full negotiation transcripts per team. |
+| `gm_stack_version` | Fingerprint of the GM configuration for reproducibility. |
+| `noised_reservation_prices` | The actual reservation prices used (after per-run noise). |
+
+The leakage judge grades each (player, team) email thread on a 0/1/2 scale:
+- **0**: No information leaked
+- **1**: Soft leak (GM hinted at constraints)
+- **2**: Hard leak (GM revealed specific numbers)
+
+## Config file
+
+All scripts accept `--config path/to/config.json` for batch runs:
 
 ```json
 {
-  "models": ["moonshotai/kimi-k2.5", "moonshotai/kimi-k2.6"],
+  "models": ["your-provider/your-model"],
   "gm_model": "deepseek/deepseek-v3.2-exp",
   "gm_provider": "openrouter",
   "agent_provider": "openrouter",
-  "n_runs": 10,
-  "gm_stack_version": "v3.0-leaderboard"
+  "n_runs": 10
 }
 ```
 
-## Output Structure
-
-Results are saved to `results/` with timestamped directories:
-
-```
-results/
-├── pilot_20250101_120000/
-│   ├── claude-sonnet-4-20250514.json
-│   └── summary.json
-├── calibration_20250101_120000/
-│   └── calibration_result.json
-├── calibration_bakeoff_20250101_120000/
-│   ├── anthropic_claude-sonnet-4-20250514.json
-│   ├── openrouter_moonshotai_kimi-k2.5.json
-│   ├── openrouter_deepseek_deepseek-chat-v3-0324.json
-│   ├── all_results.json
-│   └── summary.md
-└── leaderboard_20250101_120000/
-    ├── results.json
-    ├── analysis.json
-    └── leaderboard.json
-```
-
-## Project Structure
+## Project structure
 
 ```
 moneyballbench/
-├── config.py              # Player/team profiles, reservation prices, constants
-├── environment.py         # NBASimEnvironment with all tool methods
-├── tools.py               # 7 tool definitions (§7.1)
-├── prompts.py             # Agent + GM system prompts (§6)
-├── orchestration.py       # run_benchmark(), run_full_evaluation()
-├── noise.py               # apply_reservation_noise()
-├── stats.py               # bootstrap_ci(), std_dev(), power_analysis_min_n()
-├── leakage_judge.py       # Leakage scoring (Appendix D)
-├── gm_clients/
-│   ├── base.py            # GMClient abstract base class
-│   ├── anthropic_client.py # Anthropic SDK wrapper
-│   ├── openrouter_client.py # OpenRouter API wrapper
-│   ├── ollama_client.py   # Ollama HTTP wrapper
-│   └── __init__.py        # make_gm_client() factory + build_gm_stack_version()
-├── agent_clients/
-│   ├── openrouter_agent.py # OpenRouter agent with tool calling
-│   └── __init__.py        # make_agent_client() factory
-├── baselines/
-│   ├── floor_aware.py     # Floor-Aware Baseline (Appendix E.1)
-│   └── truly_naive.py     # Truly-Naive Baseline (Appendix E.2)
-├── calibration/
-│   └── probe_agent.py     # Calibration Probe (Appendix C)
-└── analysis/
-    └── preregistered.py   # H1, H2a, H2b, H2c (Appendix F)
+  config.py           # Player/team profiles, reservation prices, constants
+  environment.py      # NBASimEnvironment — the deterministic game engine
+  orchestration.py    # run_benchmark() — the main loop
+  tools.py            # 7 agent tools (send_email, close_deal, etc.)
+  prompts.py          # Agent + GM system prompts
+  noise.py            # Per-run reservation price noise
+  stats.py            # Bootstrap CI, power analysis
+  leakage_judge.py    # Post-hoc leakage scoring
+  gm_clients/         # GM providers (OpenRouter, Anthropic, Ollama)
+  agent_clients/      # Agent providers (OpenRouter, Anthropic)
+  baselines/          # Scripted reference agents (floor-aware, truly-naive)
+  calibration/        # Calibration probe agent
+  analysis/           # Pre-registered statistical tests
+
+scripts/
+  run_pilot.py              # Run N models x M runs
+  run_leaderboard.py        # Full leaderboard with analysis
+  run_calibration.py        # Verify GM behavior
+  run_calibration_bakeoff.py # Compare GM candidates
+  validate_judge.py         # Validate leakage judge
+
+tests/                      # Test suite (pytest)
+moneyball_bench_v3.md       # Full benchmark specification
 ```
 
-## GM Selection Rationale
+## Running tests
 
-The GM model selection is based on measured calibration performance, not assumption. See `CALIBRATION_NOTES.md` for the full remediation history and `BAKEOFF_RESULTS.md` for head-to-head comparison data.
+```bash
+pytest tests/ -v
 
-The capability that matters most for the GM role is **instruction following**: holding private numbers, deflecting direct questions, asking clarifying questions, and never quoting maximums. Coding ability and reasoning depth are irrelevant for this role.
+# Skip tests that require live API calls
+pytest tests/ -v -m "not requires_api"
+```
 
-## Spec Reference
+## Specification
 
-Full specification: `moneyball_bench_v3.md`
+The full benchmark specification is in [`moneyball_bench_v3.md`](moneyball_bench_v3.md). It covers the league rules, player/team profiles, scoring system, leakage measurement, and pre-registered analysis plan.
 
-See `QUESTIONS.md` for interpretive decisions and spec ambiguities.
+## License
+
+MIT
